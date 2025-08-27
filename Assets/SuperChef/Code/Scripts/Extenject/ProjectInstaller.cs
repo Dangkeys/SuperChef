@@ -19,13 +19,15 @@ public class ProjectInstaller : MonoInstaller
 
         // Example: services that should auto-run
         Container.BindInterfacesTo<GameBootFlow>().AsSingle(); // IInitializable/ITickable/etc.
+        Container.Bind<GameInputReader>().AsSingle().NonLazy();
+        Container.Bind<InputActions>().AsSingle().NonLazy();
     }
 }
 
 // Sample services
 public class SaveService { /* ... */ }
 
-public class AudioManager : UnityEngine.MonoBehaviour{ /* ... */ }
+public class AudioManager : MonoBehaviour{ /* ... */ }
 
 // Auto-running service (optional)
 public class GameBootFlow : IInitializable, System.IDisposable, ITickable
@@ -34,7 +36,7 @@ public class GameBootFlow : IInitializable, System.IDisposable, ITickable
     {
         await UnityServices.InitializeAsync();
         await SignUpAnonymouslyAsync();
-        SceneManager.LoadScene("TestScene");
+        // SceneManager.LoadScene("TestScene");
     }
     public void Tick() { /* runs every frame */ }
     public void Dispose() { /* runs on app quit */ }

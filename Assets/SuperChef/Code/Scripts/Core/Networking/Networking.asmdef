@@ -1,11 +1,9 @@
 {
-    "name": "Scripts",
+    "name": "Networking",
     "rootNamespace": "",
     "references": [
         "GUID:fb24642277b1db2449da7ac148ce939d",
-        "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:20d10069678ffeb9f9ea72fcd95b010e",
-        "GUID:4d4de43a87365886c97737c06c332a2a"
+        "GUID:1491147abca9d7d4bb7105af628b223e"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
