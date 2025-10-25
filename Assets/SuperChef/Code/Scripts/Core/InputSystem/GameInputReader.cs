@@ -13,6 +13,7 @@ public class GameInputReader : InputActions.IPlayerActions
 
     public Action CrouchEvent;
     public Action SprintEvent;
+    public Action InteractEvent;
 
     [Inject]
     private void Init(InputActions inputActions)
@@ -24,7 +25,7 @@ public class GameInputReader : InputActions.IPlayerActions
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        Debug.Log("Attack");
+        // Debug.Log("Attack");
     }
 
     public void OnCrouch(InputAction.CallbackContext context)
@@ -34,7 +35,8 @@ public class GameInputReader : InputActions.IPlayerActions
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        Debug.Log("Interact");
+        if (context.performed)
+            InteractEvent?.Invoke();
     }
 
     public void OnJump(InputAction.CallbackContext context)
