@@ -8,15 +8,6 @@ public class ProjectInstaller : MonoInstaller
 {
     public override void InstallBindings()
     {
-        // Non-MonoBehaviour singletons
-        Container.Bind<SaveService>().AsSingle();
-
-        // MonoBehaviour singletons created on a new GameObject (persist via ProjectContext)
-        Container.BindInterfacesAndSelfTo<AudioManager>()
-            .FromNewComponentOnNewGameObject()
-            .AsSingle()
-            .NonLazy();
-
         // Example: services that should auto-run
         Container.BindInterfacesTo<GameBootFlow>().AsSingle(); // IInitializable/ITickable/etc.
         Container.Bind<GameInputReader>().AsSingle().NonLazy();
@@ -24,10 +15,6 @@ public class ProjectInstaller : MonoInstaller
     }
 }
 
-// Sample services
-public class SaveService { /* ... */ }
-
-public class AudioManager : MonoBehaviour{ /* ... */ }
 
 // Auto-running service (optional)
 public class GameBootFlow : IInitializable, System.IDisposable, ITickable
@@ -47,7 +34,6 @@ public class GameBootFlow : IInitializable, System.IDisposable, ITickable
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
         Debug.Log("Sign in anonymously succeeded!");
 
-        // Shows how to get the playerID
         Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
 
     }

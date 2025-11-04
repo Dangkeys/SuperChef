@@ -6,12 +6,12 @@ using UnityEngine;
 public class Spawner : NetworkBehaviour
 {
     [AssetsOnly]
-    [field: SerializeField] GameObject pickableObjectPrefab;
+    [SerializeField] private GameObject pickableObjectPrefab;
 
     [Command]
     public void SpawnPickableObject()
     {
-        GameObject pickableObjectInstance =  Instantiate(pickableObjectPrefab);
+        GameObject pickableObjectInstance =  Instantiate(pickableObjectPrefab, new Vector3(0,10,0), Quaternion.identity);
         NetworkObject networkObject = pickableObjectInstance.GetComponent<NetworkObject>();
         networkObject.Spawn();
     }
