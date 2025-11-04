@@ -6,7 +6,6 @@ using Zenject;
 [RequireComponent(typeof(AutoInjectOnAwake))]
 public class PickUp : NetworkBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] private Transform grabPoint;
     private GameInputReader _inputReader;
     public PickableObject currentPickableObject { get; private set; }
