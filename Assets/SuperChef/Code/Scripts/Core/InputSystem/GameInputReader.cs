@@ -25,7 +25,8 @@ public class GameInputReader : InputActions.IPlayerActions
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        // Debug.Log("Attack");
+        if (context.performed)
+            AttackEvent?.Invoke();
     }
 
     public void OnCrouch(InputAction.CallbackContext context)
