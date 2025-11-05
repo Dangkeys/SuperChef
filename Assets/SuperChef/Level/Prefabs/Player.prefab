@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 9154313817882775581}
   - component: {fileID: 1738030249019351408}
   - component: {fileID: 6987995262118500182}
+  - component: {fileID: 148712991986802796}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -577,6 +578,19 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   <GrabPoint>k__BackingField: {fileID: 3972403841486861337}
   maxPickupDistance: 3
+--- !u!114 &148712991986802796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4046918998162714044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a52f144ce711e4b9b6315ff4919edb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxPickupDistance: 5
 --- !u!1 &4518293118863042569
 GameObject:
   m_ObjectHideFlags: 0
