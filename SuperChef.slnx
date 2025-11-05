@@ -26,6 +26,7 @@
   <Project Path="PickUp.csproj" />
   <Project Path="Networking.csproj" />
   <Project Path="InputSystem.csproj" />
+  <Project Path="Utilities.csproj" />
   <Project Path="Scripts.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
 </Solution>

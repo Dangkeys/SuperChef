@@ -1,68 +1,53 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Zenject;
 
-[RequireComponent(typeof(AutoInjectOnAwake), typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(NetworkObject), typeof(FollowTransform))]
 public class PickableObject : NetworkBehaviour
 {
     private Rigidbody rb;
-    private Collider col;
-    private NetworkObject netObj;
+    private FollowTransform followTransform;
 
     private void Awake()
     {
-        netObj = GetComponent<NetworkObject>();
         rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
+        followTransform = GetComponent<FollowTransform>();
     }
 
-    public void SetPickUpState(bool isPickedUp, Transform grabPointPosition = null, Transform parent = null)
+    public void SetPickUpParent(PickUp pickUp)
     {
-        Vector3 targetPos = grabPointPosition != null ? grabPointPosition.position : transform.position;
+        if (!IsServer) return;
 
-        if (IsServer)
+        rb.isKinematic = true; // stop physics
+        followTransform.enabled = true;
+
+        // tell everyone to attach it visually
+        var pickupRef = new NetworkObjectReference(pickUp.NetworkObject);
+        SetPickUpParentClientRpc(pickupRef);
+    }
+
+    [ClientRpc]
+    private void SetPickUpParentClientRpc(NetworkObjectReference pickUpRef)
+    {
+        if (pickUpRef.TryGet(out var pickupObj) && pickupObj.TryGetComponent(out PickUp pickUp))
         {
-            NetworkObject parentNetObj = (isPickedUp && parent != null) ? parent.GetComponent<NetworkObject>() : null;
-            SetParentNetworkObject(parentNetObj, isPickedUp, targetPos);
-        }
-        else
-        {
-            NetworkObjectReference parentRef = default;
-            if (isPickedUp && parent != null)
-            {
-                NetworkObject parentNetObj = parent.GetComponent<NetworkObject>();
-                if (parentNetObj != null)
-                    parentRef = new NetworkObjectReference(parentNetObj);
-            }
-            SetParentNetworkObjectServerRpc(parentRef, isPickedUp, targetPos);
+            followTransform.SetTargetTransform(pickUp.GrabPoint);
+            pickUp.SetCurrentPickable(this);
         }
     }
 
-    private void TogglePhysics(bool isPickedUp)
+    public void ClearPickUpParent()
     {
-        rb.isKinematic = isPickedUp;
-        // col.isTrigger = isPickedUp;
+        if (!IsServer) return;
+
+        rb.isKinematic = false;
+        followTransform.enabled = false;
+
+        ClearPickUpParentClientRpc();
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void SetParentNetworkObjectServerRpc(NetworkObjectReference parentNetworkObjectReference, bool isPickedUp, Vector3 grabPointPosition)
+    [ClientRpc]
+    private void ClearPickUpParentClientRpc()
     {
-        NetworkObject parentNetworkObject = null;
-        parentNetworkObjectReference.TryGet(out parentNetworkObject);
-        SetParentNetworkObject(parentNetworkObject, isPickedUp, grabPointPosition);
-    }
-
-    private void SetParentNetworkObject(NetworkObject parentNetworkObject, bool isPickedUp = true, Vector3 grabPointPosition = default)
-    {
-        Transform parentTransform = parentNetworkObject != null ? parentNetworkObject.transform : null;
-        netObj.TrySetParent(parentTransform);
-        if (isPickedUp)
-        {
-            transform.position = grabPointPosition;
-            transform.localRotation = Quaternion.identity;
-        }
-        TogglePhysics(isPickedUp);
+        followTransform.SetTargetTransform(null);
     }
 }
