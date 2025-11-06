@@ -327,10 +327,10 @@ GameObject:
   - component: {fileID: 4231779204663364813}
   - component: {fileID: 2061546973119896236}
   - component: {fileID: 4909908301042089467}
-  - component: {fileID: 9154313817882775581}
   - component: {fileID: 1738030249019351408}
   - component: {fileID: 6987995262118500182}
   - component: {fileID: 148712991986802796}
+  - component: {fileID: 5245258087857378962}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -526,18 +526,6 @@ MonoBehaviour:
   lookXLimit: 60
   gravity: -15
   PlayerEyesTransform: {fileID: 7066912974568070652}
---- !u!114 &9154313817882775581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4046918998162714044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 187b10dfb4df36ba7afec57997886c55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Extenject::AutoInjectOnAwake
 --- !u!143 &1738030249019351408
 CharacterController:
   m_ObjectHideFlags: 0
@@ -591,6 +579,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxPickupDistance: 5
+--- !u!114 &5245258087857378962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4046918998162714044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 187b10dfb4df36ba7afec57997886c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4518293118863042569
 GameObject:
   m_ObjectHideFlags: 0
@@ -1289,7 +1289,7 @@ GameObject:
   m_Layer: 0
   m_Name: GrabPoint
   m_TagString: Untagged
-  m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

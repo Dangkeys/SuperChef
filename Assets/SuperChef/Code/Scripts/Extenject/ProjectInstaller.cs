@@ -21,8 +21,8 @@ public class GameBootFlow : IInitializable, System.IDisposable, ITickable
 {
     public async void Initialize()
     {
-        await UnityServices.InitializeAsync();
-        await SignUpAnonymouslyAsync();
+        // await UnityServices.InitializeAsync();
+        // await SignUpAnonymouslyAsync();
         // SceneManager.LoadScene("TestScene");
     }
     public void Tick() { /* runs every frame */ }
