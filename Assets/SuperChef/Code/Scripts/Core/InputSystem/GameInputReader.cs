@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class GameInputReader : InputActions.IPlayerActions
+public class GameInputReader : InputActions.IPlayerActions, IDisposable
 {
     public Action<Vector2> MoveEvent;
     public Action JumpEvent;
@@ -15,11 +15,13 @@ public class GameInputReader : InputActions.IPlayerActions
     public Action SprintEvent;
     public Action InteractEvent;
 
+    private InputActions inputActions;
     [Inject]
     private void Init(InputActions inputActions)
     {
-        inputActions.Player.SetCallbacks(this);
-        inputActions.Player.Enable();
+        this.inputActions = inputActions;
+        this.inputActions.Player.SetCallbacks(this);
+        this.inputActions.Player.Enable();
         Debug.Log("GameInputReader Init");
     }
 
@@ -69,5 +71,15 @@ public class GameInputReader : InputActions.IPlayerActions
     public void OnSprint(InputAction.CallbackContext context)
     {
         Debug.Log("Sprint");
+    }
+
+    public void Dispose()
+    {
+        if (inputActions != null)
+        {
+            inputActions.Player.Disable();
+            inputActions.Player.SetCallbacks(null);
+            Debug.Log("GameInputReader disposed and inputs disabled");
+        }
     }
 }
