@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(AutoInjectOnAwake), typeof(CharacterController))]
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : NetworkBehaviour
 {
     [Header("Components")]
@@ -22,14 +22,14 @@ public class PlayerMovement : NetworkBehaviour
 
     private Transform cameraTransform;
 
-    private GameInputReader _inputReader;
+    private GameInputReader inputReader;
     [field: SerializeField] public Transform PlayerEyesTransform;
 
 
     [Inject]
     private void Init(GameInputReader inputReader)
     {
-        _inputReader = inputReader;
+        this.inputReader = inputReader;
     }
 
     void Awake()
@@ -40,9 +40,9 @@ public class PlayerMovement : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
-        _inputReader.MoveEvent += OnMove;
-        _inputReader.JumpEvent += OnJump;
-        _inputReader.LookEvent += OnLook;
+        inputReader.MoveEvent += OnMove;
+        inputReader.JumpEvent += OnJump;
+        inputReader.LookEvent += OnLook;
 
         Camera mainCamera = Camera.main;
         mainCamera.transform.SetParent(PlayerEyesTransform);
@@ -121,8 +121,8 @@ public class PlayerMovement : NetworkBehaviour
     public override void OnDestroy()
     {
         if (!IsOwner) return;
-        _inputReader.MoveEvent -= OnMove;
-        _inputReader.JumpEvent -= OnJump;
-        _inputReader.LookEvent -= OnLook;
+        inputReader.MoveEvent -= OnMove;
+        inputReader.JumpEvent -= OnJump;
+        inputReader.LookEvent -= OnLook;
     }
 }

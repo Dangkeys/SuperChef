@@ -5,26 +5,26 @@ using Zenject;
 public class Inventory : MonoBehaviour
 {
     [field: SerializeField] public Stack<InventoryItemSO> inventoryItemSOs { get; private set; } = new Stack<InventoryItemSO>();
-    private GameInputReader _inputReader;
+    private GameInputReader inputReader;
+    private InventoryItemProvider inventoryItemProvider;
 
 
     [SerializeField] private float maxPickupDistance = 10f;
-
     [Inject]
-    private void Init(GameInputReader inputReader)
+    private void Init(GameInputReader inputReader, InventoryItemProvider inventoryItemProvider)
     {
-        _inputReader = inputReader;
-
+        this.inputReader = inputReader;
+        this.inventoryItemProvider = inventoryItemProvider;
     }
     private void Start()
     {
-        _inputReader.InteractEvent += OnTryAddToInventory;
-        _inputReader.AttackEvent += TryPopStack;
+        inputReader.InteractEvent += OnTryAddToInventory;
+        inputReader.AttackEvent += TryPopStack;
     }
     private void OnDestroy()
     {
-        _inputReader.InteractEvent -= OnTryAddToInventory;
-        _inputReader.AttackEvent -= TryPopStack;
+        inputReader.InteractEvent -= OnTryAddToInventory;
+        inputReader.AttackEvent -= TryPopStack;
     }
 
 
@@ -37,7 +37,7 @@ public class Inventory : MonoBehaviour
         {
             if (hit.collider.TryGetComponent(out InventoryItem inventoryItem))
             {
-                inventoryItemSOs.Push(inventoryItem.inventoryItemSO);
+                inventoryItemSOs.Push(inventoryItem.InventoryItemSO);
                 Debug.Log(inventoryItemSOs);
                 Destroy(inventoryItem.gameObject);
             }
@@ -50,7 +50,17 @@ public class Inventory : MonoBehaviour
         {
             InventoryItemSO inventoryItemSO = inventoryItemSOs.Pop();
             Debug.Log("Drop " + inventoryItemSO.Name + "Its Detail is" + inventoryItemSO.Description);
-            Instantiate(inventoryItemSO.InventoryItemPrefab, transform.position + transform.forward * 2, Quaternion.identity);
+
+            InventoryItem itemPrefab = inventoryItemProvider.GetInventoryItemBySO(inventoryItemSO);
+
+            if (itemPrefab == null)
+            {
+                Debug.LogError($"InventoryItem prefab not found for SO: {inventoryItemSO.Name}", this);
+                return;
+            }
+
+            float spawnOffest = 2.0f;
+            Instantiate(itemPrefab, transform.position + transform.forward * spawnOffest, Quaternion.identity);
         }
     }
 }

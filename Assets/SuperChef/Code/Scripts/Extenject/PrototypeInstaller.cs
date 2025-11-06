@@ -3,8 +3,12 @@ using Zenject;
 
 public class PrototypeInstaller : MonoInstaller
 {
+    [SerializeField] private InventoryItemProvider inventoryItemProviderPrefab;
+
     public override void InstallBindings()
     {
-        // Container.Bind<NetcodeManager>().AsSingle().NonLazy();
+        Container.Bind<InventoryItemProvider>()
+            .FromComponentInNewPrefab(inventoryItemProviderPrefab)
+            .AsSingle().NonLazy();
     }
 }

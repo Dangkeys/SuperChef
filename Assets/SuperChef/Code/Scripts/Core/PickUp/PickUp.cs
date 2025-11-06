@@ -4,10 +4,10 @@ using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(AutoInjectOnAwake))]
+// [RequireComponent(typeof(AutoInjectOnAwake))]
 public class PickUp : NetworkBehaviour
 {
-    private GameInputReader _inputReader;
+    private GameInputReader inputReader;
     public PickableObject CurrentPickableObject { get; private set; }
     [field: SerializeField] public Transform GrabPoint { get; private set; }
 
@@ -16,14 +16,14 @@ public class PickUp : NetworkBehaviour
     [Inject]
     private void Init(GameInputReader inputReader)
     {
-        _inputReader = inputReader;
+        this.inputReader = inputReader;
 
     }
     public override void OnNetworkSpawn()
     {
 
         if (!IsOwner) return;
-        _inputReader.InteractEvent += OnTryPickUp;
+        inputReader.InteractEvent += OnTryPickUp;
     }
 
     private void OnTryPickUp()
@@ -40,7 +40,7 @@ public class PickUp : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         if (!IsOwner) return;
-        _inputReader.InteractEvent -= OnTryPickUp;
+        inputReader.InteractEvent -= OnTryPickUp;
     }
     private void TryPickUp()
     {
