@@ -331,6 +331,7 @@ GameObject:
   - component: {fileID: 6987995262118500182}
   - component: {fileID: 148712991986802796}
   - component: {fileID: 5245258087857378962}
+  - component: {fileID: 1623986567042216449}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -523,7 +524,7 @@ MonoBehaviour:
   moveSpeed: 7.5
   jumpHeight: 2
   lookSpeed: 0.12
-  lookXLimit: 60
+  lookXLimit: 90
   gravity: -15
   PlayerEyesTransform: {fileID: 7066912974568070652}
 --- !u!143 &1738030249019351408
@@ -591,6 +592,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187b10dfb4df36ba7afec57997886c55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1623986567042216449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4046918998162714044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaf6749df4b465a4fa4607ce2bd550d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  currentBuildableObjectPrefab: {fileID: 5042613131319884354, guid: 6afe4df972660a94ea26d7777b74362e, type: 3}
+  canPlaceMaterial: {fileID: 2100000, guid: 8c8c6545c7ee28449a323a00af42e4c1, type: 2}
+  canNotPlaceMaterial: {fileID: 2100000, guid: dd8f8e5ecad9d1f49929357c0dff6e4e, type: 2}
+  maxPlaceObjectDistance: 5
+  ghostLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &4518293118863042569
 GameObject:
   m_ObjectHideFlags: 0

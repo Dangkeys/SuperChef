@@ -11,9 +11,10 @@ public class Spawner : NetworkBehaviour
     [Command]
     public void SpawnPickableObject()
     {
-        GameObject pickableObjectInstance =  Instantiate(pickableObjectPrefab, new Vector3(0,10,0), Quaternion.identity);
+        GameObject pickableObjectInstance = Instantiate(pickableObjectPrefab, new Vector3(0, 10, 0), Quaternion.identity);
         NetworkObject networkObject = pickableObjectInstance.GetComponent<NetworkObject>();
         networkObject.Spawn();
     }
+    
     
 }

@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-// [RequireComponent(typeof(AutoInjectOnAwake))]
+[RequireComponent(typeof(AutoInjectOnAwake))]
 public class PickUp : NetworkBehaviour
 {
     private GameInputReader inputReader;
@@ -17,7 +17,6 @@ public class PickUp : NetworkBehaviour
     private void Init(GameInputReader inputReader)
     {
         this.inputReader = inputReader;
-
     }
     public override void OnNetworkSpawn()
     {

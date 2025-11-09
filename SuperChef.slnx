@@ -24,8 +24,8 @@
   <Project Path="QFSW.QC.Editor.Tools.csproj" />
   <Project Path="Sirenix.OdinInspector.Modules.UnityMathematics.csproj" />
   <Project Path="QFSW.QC.ScanRules.csproj" />
-  <Project Path="PickUp.csproj" />
   <Project Path="Scripts.csproj" />
+  <Project Path="PickUp.csproj" />
   <Project Path="Networking.csproj" />
   <Project Path="InputSystem.csproj" />
   <Project Path="Utilities.csproj" />
