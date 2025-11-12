@@ -1,22 +1,27 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Zenject;
 
 public class InventoryUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private InventorySlotUI currentInventorySlotUI;
+    private Inventory inventory;
 
-    void Update()
+    [Inject]
+    public void Construct(SignalBus signalBus)
     {
-        if (currentInventorySlotUI == null) return;
-        currentInventorySlotUI.transform.position = Input.mousePosition;
-    }
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
+        signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    private void OnPlayerSpawned(PlayerSpawnedSignal signal)
     {
-        throw new System.NotImplementedException();
+        Initialize(signal.Inventory);
     }
+
+    public void Initialize(Inventory playerInventory)
+    {
+        inventory = playerInventory;
+    }
+
+    public void OnPointerDown(PointerEventData eventData) { }
+    public void OnPointerUp(PointerEventData eventData) { }
 }

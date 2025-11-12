@@ -15,11 +15,14 @@ public class BuildingManager : NetworkBehaviour
     private GameObject visualizeBuildableObject;
     private Parentable latestParentable = null;
     private bool canPlaceHere;
+    private Inventory inventory;
 
     [Inject]
-    private void Init(GameInputReader inputReader)
+    private void Init(GameInputReader inputReader, Inventory inventory)
     {
         this.inputReader = inputReader;
+        this.inventory = inventory;
+        Debug.Log("Inventory" + this.inventory);
     }
 
     public override void OnNetworkSpawn()
