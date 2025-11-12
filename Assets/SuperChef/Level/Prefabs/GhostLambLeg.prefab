@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6993854619112595327
+--- !u!1 &2629127272418962556
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,49 +8,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2632245919812680316}
-  - component: {fileID: 6610520441352937726}
-  - component: {fileID: 2827882908909732356}
-  - component: {fileID: -5180593745705898170}
-  - component: {fileID: 5042613131319884354}
-  - component: {fileID: 7218003216795705656}
+  - component: {fileID: 3402286997658842822}
+  - component: {fileID: 1772309848527845731}
+  - component: {fileID: 4574660115281300905}
+  - component: {fileID: 95447108445953130}
   m_Layer: 0
-  m_Name: Tomato
+  m_Name: GhostLambLeg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2632245919812680316
+--- !u!4 &3402286997658842822
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993854619112595327}
+  m_GameObject: {fileID: 2629127272418962556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.412, y: 1.513, z: 9.815862}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6610520441352937726
+--- !u!33 &1772309848527845731
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993854619112595327}
-  m_Mesh: {fileID: -1340541719380434750, guid: c945b3fa736b40940a696ec897b85013, type: 3}
---- !u!23 &2827882908909732356
+  m_GameObject: {fileID: 2629127272418962556}
+  m_Mesh: {fileID: -7661124072915667876, guid: c696ac6d3a3e6f3498660d418d8fe5a0, type: 3}
+--- !u!23 &4574660115281300905
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993854619112595327}
+  m_GameObject: {fileID: 2629127272418962556}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -89,54 +87,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-5180593745705898170
-MonoBehaviour:
+--- !u!65 &95447108445953130
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993854619112595327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1105466465
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
---- !u!114 &5042613131319884354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993854619112595327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c4e37d3abd264045a413ea55d4465d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  <ActiveLayerMask>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 4294967295
---- !u!135 &7218003216795705656
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6993854619112595327}
+  m_GameObject: {fileID: 2629127272418962556}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -149,5 +106,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.21364804
-  m_Center: {x: 0.003187567, y: 0.2122438, z: 0.0006984994}
+  m_Size: {x: 0.55185413, y: 0.44653958, z: 0.7880196}
+  m_Center: {x: 0.008857831, y: 0.22326958, z: -0.044129282}

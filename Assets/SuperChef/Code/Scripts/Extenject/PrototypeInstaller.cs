@@ -10,5 +10,6 @@ public class PrototypeInstaller : MonoInstaller
         Container.Bind<InventoryItemProvider>()
             .FromComponentInNewPrefab(inventoryItemProviderPrefab)
             .AsSingle().NonLazy();
+
     }
 }

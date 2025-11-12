@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-
-public class Inventory : MonoBehaviour
+using Unity.Netcode;
+public class Inventory : NetworkBehaviour
 {
-    [field: SerializeField] public Stack<InventoryItemSO> inventoryItemSOs { get; private set; } = new Stack<InventoryItemSO>();
+
+    private const int MAXIMUM_SLOT_AMOUNT = 40;
+    [field: SerializeField] public InventorySlot[] InventorySlots { get; private set; } = new InventorySlot[MAXIMUM_SLOT_AMOUNT];
     private GameInputReader inputReader;
     private InventoryItemProvider inventoryItemProvider;
 
@@ -16,18 +18,16 @@ public class Inventory : MonoBehaviour
         this.inputReader = inputReader;
         this.inventoryItemProvider = inventoryItemProvider;
     }
-    private void Start()
+    public override void OnNetworkSpawn()
     {
+        if (!IsOwner) return;
         inputReader.InteractEvent += OnTryAddToInventory;
-        inputReader.AttackEvent += TryPopStack;
     }
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
+        if (!IsOwner) return;
         inputReader.InteractEvent -= OnTryAddToInventory;
-        inputReader.AttackEvent -= TryPopStack;
     }
-
-
 
     private void OnTryAddToInventory()
     {
@@ -37,30 +37,39 @@ public class Inventory : MonoBehaviour
         {
             if (hit.collider.TryGetComponent(out InventoryItem inventoryItem))
             {
-                inventoryItemSOs.Push(inventoryItem.InventoryItemSO);
-                Debug.Log(inventoryItemSOs);
-                Destroy(inventoryItem.gameObject);
+                for (int i = 0; i < InventorySlots.Length; i++)
+                {
+                    InventorySlot currentInventorySlot = InventorySlots[i];
+                    if (currentInventorySlot.InventoryItemSO == inventoryItem.InventoryItemSO)
+                    {
+                        int maximumAmount = inventoryItem.InventoryItemSO.MaximumAmount;
+
+                        if (currentInventorySlot.CurrentAmount >= maximumAmount) continue;
+                        currentInventorySlot.IncrementCurrentAmount();
+                        Destroy(inventoryItem.gameObject);
+                        return;
+                    }
+
+                }
+
+                for (int i = 0; i < InventorySlots.Length; i++)
+                {
+                    InventorySlot currentInventorySlot = InventorySlots[i];
+                    if (currentInventorySlot.InventoryItemSO != null) continue;
+                    {
+                        currentInventorySlot.SetInventoryItemSO(inventoryItem.InventoryItemSO);
+                        currentInventorySlot.SetCurrentAmount(1);
+                        Destroy(inventoryItem.gameObject);
+                        return;
+                    }
+
+                }
+
             }
         }
-
     }
-    private void TryPopStack()
+    private void PopInventoryAndSpawn(int index)
     {
-        if (inventoryItemSOs.Count > 0)
-        {
-            InventoryItemSO inventoryItemSO = inventoryItemSOs.Pop();
-            Debug.Log("Drop " + inventoryItemSO.Name + "Its Detail is" + inventoryItemSO.Description);
-
-            InventoryItem itemPrefab = inventoryItemProvider.GetInventoryItemBySO(inventoryItemSO);
-
-            if (itemPrefab == null)
-            {
-                Debug.LogError($"InventoryItem prefab not found for SO: {inventoryItemSO.Name}", this);
-                return;
-            }
-
-            float spawnOffest = 2.0f;
-            Instantiate(itemPrefab, transform.position + transform.forward * spawnOffest, Quaternion.identity);
-        }
+        
     }
 }

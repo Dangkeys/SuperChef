@@ -5,15 +5,17 @@ using Zenject;
 
 public class BuildingManager : NetworkBehaviour
 {
-    [SerializeField] private BuildableObject currentBuildableObjectPrefab;
     [SerializeField] private Material canPlaceMaterial;
     [SerializeField] private Material canNotPlaceMaterial;
     [SerializeField] private float maxPlaceObjectDistance = 5f;
+    [SerializeField] private LayerMask ghostLayerMask;
+    [SerializeField] private BuildableObjectSO currentBuildableObjectSO;
 
     private GameInputReader inputReader;
-    private BuildableObject visualizeBuildableObject;
+    private GameObject visualizeBuildableObject;
     private Parentable latestParentable = null;
     private bool canPlaceHere;
+
     [Inject]
     private void Init(GameInputReader inputReader)
     {
@@ -44,9 +46,13 @@ public class BuildingManager : NetworkBehaviour
     private void StartVisualizeBuildableObject()
     {
         StopVisualizeBuildableObject();
-        visualizeBuildableObject = Instantiate(currentBuildableObjectPrefab);
+        if (currentBuildableObjectSO == null) return;
+        visualizeBuildableObject = Instantiate(currentBuildableObjectSO.BuildableObjectGhostPrefab);
 
-        visualizeBuildableObject.GetComponent<Collider>().isTrigger = true;
+        var collider = visualizeBuildableObject.GetComponent<Collider>();
+        if (collider != null) collider.isTrigger = true;
+        int ghostLayer = ghostLayerMask.value == 0 ? 0 : (int)Mathf.Log(ghostLayerMask.value, 2);
+        visualizeBuildableObject.gameObject.layer = ghostLayer;
     }
 
     private void StopVisualizeBuildableObject()
@@ -61,7 +67,7 @@ public class BuildingManager : NetworkBehaviour
     private void VisualizeBuildableObject()
     {
         if (visualizeBuildableObject == null) return;
-        int placementLayerMask = currentBuildableObjectPrefab.ActiveLayerMask.value;
+        int placementLayerMask = currentBuildableObjectSO.BuildableObject.ActiveLayerMask.value;
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, maxPlaceObjectDistance, placementLayerMask))
         {
@@ -78,7 +84,7 @@ public class BuildingManager : NetworkBehaviour
 
             canPlaceHere = !IsOccupied(visualizeBuildableObject);
 
-            visualizeBuildableObject.SetGhostMaterial(canPlaceHere ? canPlaceMaterial : canNotPlaceMaterial);
+            SetGhostMaterial();
         }
         else
         {
@@ -91,37 +97,47 @@ public class BuildingManager : NetworkBehaviour
         }
     }
 
-private bool IsOccupied(BuildableObject ghost)
-{
-    Collider ghostCollider = ghost.GetComponentInChildren<Collider>();
-    if (ghostCollider == null) return false; // if no collider, skip
-
-    // Get collider's position and size in world space
-    Bounds bounds = ghostCollider.bounds;
-    Vector3 center = bounds.center;
-    Vector3 halfExtents = bounds.extents;
-
-    // Check overlapping colliders
-    Collider[] overlaps = Physics.OverlapBox(center, halfExtents, ghost.transform.rotation);
-
-    foreach (Collider col in overlaps)
+    private void SetGhostMaterial()
     {
-        if (col.transform.IsChildOf(ghost.transform))
-            continue;
-
-        // If we hit another BuildableObject, it's occupied
-        if (col.GetComponent<BuildableObject>() != null)
-            return true;
+            var renderers = visualizeBuildableObject.GetComponentsInChildren<Renderer>();
+            var mat = canPlaceHere ? canPlaceMaterial : canNotPlaceMaterial;
+            foreach (var r in renderers)
+            {
+                r.material = mat;
+            }
     }
 
-    return false;
-}
+    private bool IsOccupied(GameObject ghost)
+    {
+        Collider ghostCollider = ghost.GetComponentInChildren<Collider>();
+        if (ghostCollider == null) return false; // if no collider, skip
+
+        // Get collider's position and size in world space
+        Bounds bounds = ghostCollider.bounds;
+        Vector3 center = bounds.center;
+        Vector3 halfExtents = bounds.extents;
+
+        // Check overlapping colliders
+        Collider[] overlaps = Physics.OverlapBox(center, halfExtents, ghost.transform.rotation);
+
+        foreach (Collider col in overlaps)
+        {
+            if (col.transform.IsChildOf(ghost.transform))
+                continue;
+
+            // If we hit another BuildableObject, it's occupied
+            if (col.GetComponent<BuildableObject>() != null)
+                return true;
+        }
+
+        return false;
+    }
 
 
 
    private void OnTryBuildObject()
     {
-        if (!canPlaceHere || visualizeBuildableObject == null)
+        if (!canPlaceHere || currentBuildableObjectSO == null)
             return;
 
         Vector3 placePos = visualizeBuildableObject.transform.position;
@@ -133,9 +149,14 @@ private bool IsOccupied(BuildableObject ghost)
         }
         else
         {
-            RequestSpawnServerRpc(placePos, placeRot, latestParentable.TryGetComponent(out NetworkObjectReference parentRef)
-                ? parentRef
-                : default);
+        NetworkObjectReference parentRef = default;
+        if (latestParentable != null && latestParentable.TryGetComponent(out NetworkObject parentNetObj))
+        {
+            parentRef = parentNetObj;
+        }
+
+
+        RequestSpawnServerRpc(placePos, placeRot, parentRef);
   
         }
     }
@@ -148,12 +169,12 @@ private bool IsOccupied(BuildableObject ghost)
 
     private void SpawnObject(Vector3 position, Quaternion rotation, NetworkObjectReference parentRef = default)
     {
-        var newObj = Instantiate(currentBuildableObjectPrefab, position, rotation);
+        var newObj = Instantiate(currentBuildableObjectSO.BuildableObject, position, rotation);
         newObj.NetworkObject.Spawn(true);
 
-        if (parentRef.TryGet(out var parentBehaviour))
+        if (parentRef.TryGet(out NetworkObject parentNetworkObject))
         {
-            newObj.NetworkObject.TrySetParent(parentBehaviour.transform);
+            newObj.NetworkObject.TrySetParent(parentNetworkObject.transform);
         }
         else if (latestParentable != null)
         {

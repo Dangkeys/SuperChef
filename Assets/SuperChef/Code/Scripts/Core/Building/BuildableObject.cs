@@ -12,11 +12,4 @@ public class BuildableObject : NetworkBehaviour
         renderers = GetComponentsInChildren<Renderer>();
     }
 
-    public void SetGhostMaterial(Material mat)
-    {
-        foreach (var r in renderers)
-        {
-            r.material = mat;
-        }
-    }
 }

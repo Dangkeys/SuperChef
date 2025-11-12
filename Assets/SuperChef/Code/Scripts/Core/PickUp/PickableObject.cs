@@ -1,53 +1,27 @@
 using Unity.Netcode;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(NetworkObject), typeof(FollowTransform))]
+[RequireComponent(typeof(Rigidbody), typeof(NetworkObject))]
 public class PickableObject : NetworkBehaviour
 {
     private Rigidbody rb;
-    private FollowTransform followTransform;
-
-    private void Awake()
+    private Collider col;
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        followTransform = GetComponent<FollowTransform>();
+        col = GetComponent<Collider>(); 
     }
-
-    public void SetPickUpParent(PickUp pickUp)
-    {
-        if (!IsServer) return;
-
-        rb.isKinematic = true; // stop physics
-        followTransform.enabled = true;
-
-        // tell everyone to attach it visually
-        var pickupRef = new NetworkObjectReference(pickUp.NetworkObject);
-        SetPickUpParentClientRpc(pickupRef);
-    }
-
     [ClientRpc]
-    private void SetPickUpParentClientRpc(NetworkObjectReference pickUpRef)
+    public void NotifyObjectPickedClientRpc()
     {
-        if (pickUpRef.TryGet(out var pickupObj) && pickupObj.TryGetComponent(out PickUp pickUp))
-        {
-            followTransform.SetTargetTransform(pickUp.GrabPoint);
-            pickUp.SetCurrentPickable(this);
-        }
+        rb.isKinematic = true;
+        col.enabled = false;
     }
-
-    public void ClearPickUpParent()
+    [ClientRpc]
+    public void NotifyObjectDroppedClientRpc()
     {
-        if (!IsServer) return;
-
         rb.isKinematic = false;
-        followTransform.enabled = false;
-
-        ClearPickUpParentClientRpc();
+        col.enabled = true;
     }
 
-    [ClientRpc]
-    private void ClearPickUpParentClientRpc()
-    {
-        followTransform.SetTargetTransform(null);
-    }
 }
