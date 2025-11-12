@@ -9,6 +9,6 @@ public class InventoryItemSO : ScriptableObject
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public string Description { get; private set; }
 
-    [field: SerializeField] public Image ItemUI { get; private set; }
+    [field: SerializeField] public Image ItemIcon { get; private set; }
     [field: SerializeField] public int MaximumAmount { get; private set; }
 }

@@ -1,19 +1,22 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class InventoryUI : MonoBehaviour
+public class InventoryUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    [AssetsOnly]
-    [SerializeField] private InventoryItemUI inventoryItemUIPrefab;
-    
-    void Start()
-    {
-        
-    }
+    private InventorySlotUI currentInventorySlotUI;
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if (currentInventorySlotUI == null) return;
+        currentInventorySlotUI.transform.position = Input.mousePosition;
+    }
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
     }
 }

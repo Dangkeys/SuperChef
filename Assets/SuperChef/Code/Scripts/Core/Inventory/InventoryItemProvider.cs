@@ -48,4 +48,14 @@ public class InventoryItemProvider : MonoBehaviour
         if (so == null) return null;
         return soToInventoryItemDict.TryGetValue(so, out var item) ? item : null;
     }
+    public InventoryItemSO GetInventoryItemSOByName(string name)
+    {
+        foreach (InventoryItemSO item in soToInventoryItemDict.Keys)
+        {
+            if (item.Name == name)
+                return item;
+        }
+        return null;
+    }
+
 }

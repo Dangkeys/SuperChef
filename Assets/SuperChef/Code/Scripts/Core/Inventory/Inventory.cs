@@ -31,12 +31,14 @@ public class Inventory : NetworkBehaviour
 
     private void OnTryAddToInventory()
     {
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // center of screen
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
         if (Physics.Raycast(ray, out var hit, maxPickupDistance))
         {
             if (hit.collider.TryGetComponent(out InventoryItem inventoryItem))
             {
+                if (!inventoryItem.TryGetComponent(out NetworkObject networkObject)) return;
+                NetworkObjectReference networkObjectReference = new NetworkObjectReference(networkObject);
                 for (int i = 0; i < InventorySlots.Length; i++)
                 {
                     InventorySlot currentInventorySlot = InventorySlots[i];
@@ -46,7 +48,8 @@ public class Inventory : NetworkBehaviour
 
                         if (currentInventorySlot.CurrentAmount >= maximumAmount) continue;
                         currentInventorySlot.IncrementCurrentAmount();
-                        Destroy(inventoryItem.gameObject);
+                        DespawnInventoryItemServerRpc(networkObjectReference);
+
                         return;
                     }
 
@@ -59,7 +62,9 @@ public class Inventory : NetworkBehaviour
                     {
                         currentInventorySlot.SetInventoryItemSO(inventoryItem.InventoryItemSO);
                         currentInventorySlot.SetCurrentAmount(1);
-                        Destroy(inventoryItem.gameObject);
+
+                        DespawnInventoryItemServerRpc(networkObjectReference);
+
                         return;
                     }
 
@@ -68,8 +73,56 @@ public class Inventory : NetworkBehaviour
             }
         }
     }
-    private void PopInventoryAndSpawn(int index)
+
+    public void SwapInventorySlot(InventorySlot inventorySlotA, InventorySlot inventorySlotB)
     {
-        
+        if (inventorySlotA == null || inventorySlotB == null || inventorySlotA == inventorySlotB) return;
+
+        var itemA = inventorySlotA.InventoryItemSO;
+        var amountA = inventorySlotA.CurrentAmount;
+
+        inventorySlotA.SetInventoryItemSO(inventorySlotB.InventoryItemSO);
+        inventorySlotA.SetCurrentAmount(inventorySlotB.CurrentAmount);
+
+        inventorySlotB.SetInventoryItemSO(itemA);
+        inventorySlotB.SetCurrentAmount(amountA);
     }
+
+
+    private void RemoveInventorySlotAndSpawn(InventorySlot inventorySlot)
+    {
+        if (inventorySlot.InventoryItemSO == null) return;
+
+        float offsetAmount = 3f;
+        Vector3 spawnPosition = transform.position + Vector3.forward * offsetAmount;
+
+        SpawnDroppedItemServerRpc(inventorySlot.InventoryItemSO.name, spawnPosition);
+
+        inventorySlot.Reset();
+    }
+    [ServerRpc]
+    private void DespawnInventoryItemServerRpc(NetworkObjectReference networkObjectReference)
+    {
+        if (!networkObjectReference.TryGet(out NetworkObject networkObject)) return;
+        if (networkObject.IsSpawned)
+        {
+            networkObject.Despawn(true);
+        }
+    }
+    [ServerRpc]
+    private void SpawnDroppedItemServerRpc(string itemSOName, Vector3 spawnPosition)
+    {
+        InventoryItemSO itemSO = inventoryItemProvider.GetInventoryItemSOByName(itemSOName);
+        if (itemSO == null) return;
+
+        InventoryItem inventoryItem = Instantiate(inventoryItemProvider.GetInventoryItemBySO(itemSO), spawnPosition, Quaternion.identity);
+
+        if (inventoryItem.TryGetComponent(out NetworkObject networkObject))
+        {
+
+            networkObject.Spawn();
+        }
+    }
+
+
 }
