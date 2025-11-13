@@ -1,44 +1,50 @@
-using UnityEngine;
-using UnityEngine.UI;
+using System;
 
-public class InventorySlot : MonoBehaviour
+[Serializable]
+public class InventorySlot
 {
-    [field: SerializeField] public InventoryItemSO InventoryItemSO { get; private set; }
-    [field: SerializeField] public int CurrentAmount { get; private set; }
-    [field: SerializeField] public InventorySlotUI InventorySlotUI{get; private set;}
+    public event Action OnSlotChanged;
+    
+    public InventoryItemSO InventoryItemSO { get; private set; }
+    public int CurrentAmount { get; private set; }
 
     public void SetInventoryItemSO(InventoryItemSO inventoryItemSO)
     {
         InventoryItemSO = inventoryItemSO;
-        InventorySlotUI.UpdateUI(this);
+        OnSlotChanged?.Invoke();
     }
 
-    public int IncrementCurrentAmount(int amount = 1)
-    {
-        if (InventoryItemSO == null || amount < 0) return 0;
-
-        CurrentAmount = Mathf.Clamp(CurrentAmount + amount, 0, InventoryItemSO.MaximumAmount);
-        InventorySlotUI.UpdateUI(this);
-        return InventoryItemSO.MaximumAmount - CurrentAmount;
-    }
-    public void DecrementCurrentAmount(int amount = 1)
-    {
-        if (InventoryItemSO == null || amount < 0) return ;
-
-
-        CurrentAmount = Mathf.Clamp(CurrentAmount - amount, 0, InventoryItemSO.MaximumAmount);
-        InventorySlotUI.UpdateUI(this);
-    }
     public void SetCurrentAmount(int amount)
     {
-        CurrentAmount = Mathf.Clamp(amount, 0, InventoryItemSO.MaximumAmount);
-        InventorySlotUI.UpdateUI(this);
+        CurrentAmount = amount;
+        OnSlotChanged?.Invoke();
     }
+
+    public void IncrementCurrentAmount()
+    {
+        CurrentAmount++;
+        OnSlotChanged?.Invoke();
+    }
+
+    public void DecrementCurrentAmount()
+    {
+        CurrentAmount--;
+        if (CurrentAmount <= 0)
+        {
+            Reset();
+        }
+        else
+        {
+            OnSlotChanged?.Invoke();
+        }
+    }
+
     public void Reset()
     {
         InventoryItemSO = null;
         CurrentAmount = 0;
-        InventorySlotUI.UpdateUI(this);
+        OnSlotChanged?.Invoke();
     }
 
+    public bool IsEmpty() => InventoryItemSO == null || CurrentAmount <= 0;
 }

@@ -11,6 +11,5 @@ public class PlayerInstaller : MonoInstaller
         Container.Bind<PickUp>().FromInstance(pickUp).AsSingle().NonLazy();
         Container.Bind<Inventory>().FromInstance(inventory).AsSingle().NonLazy();
         Container.Bind<BuildingManager>().FromInstance(buildingManager).AsSingle().NonLazy();
-        Container.DeclareSignal<PlayerSpawnedSignal>();
     }
 }

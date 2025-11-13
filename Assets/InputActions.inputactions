@@ -991,6 +991,40 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Global",
+            "id": "61f5e74d-8f52-4f0f-8bbe-1c49130caf90",
+            "actions": [],
+            "bindings": []
+        },
+        {
+            "name": "GameScene",
+            "id": "5c0931dd-911c-4e89-8a70-1121731f6f5b",
+            "actions": [
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "1bd269ea-432e-4855-8165-363a7fceaf7f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cfe16d86-4feb-4cc5-ba0b-cafec55eaf2c",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Ball
   <Description>k__BackingField: just for fun
-  <InventoryItemPrefab>k__BackingField: {fileID: 4615954903175476617, guid: 6faffe01a1eaa9e4aa4b233335461ca0, type: 3}
-  <ItemUI>k__BackingField: {fileID: 0}
+  <ItemSprite>k__BackingField: {fileID: 21300048, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  <MaximumAmount>k__BackingField: 1

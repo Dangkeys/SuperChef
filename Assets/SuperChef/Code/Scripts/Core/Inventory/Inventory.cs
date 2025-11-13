@@ -6,19 +6,26 @@ using log4net.Appender;
 
 public class Inventory : NetworkBehaviour
 {
-    private const int MAX_SLOT_COUNT = 40;
+    private const int MAX_SLOT_COUNT = 20;
+    public int MaxHotBarSlotAmount { get; private set; } = 4;
 
     public InventorySlot[] InventorySlots { get; private set; } = new InventorySlot[MAX_SLOT_COUNT];
 
-    [SerializeField] 
+    [SerializeField]
     private float maxPickupDistance = 10f;
 
     private GameInputReader inputReader;
     private InventoryItemProvider inventoryItemProvider;
-    public InventorySlot CurrentInventorySlot { get; private set; }
+    public InventorySlot SelectedInventorySlot { get; private set; }
     private PickUp pickUp;
 
-
+    private void Awake()
+    {
+        for (int i = 0; i < MAX_SLOT_COUNT; i++)
+        {
+            InventorySlots[i] = new InventorySlot();
+        }
+    }
 
     [Inject]
     private void Init(GameInputReader inputReader, InventoryItemProvider inventoryItemProvider, PickUp pickUp)

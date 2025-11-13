@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: med
   <Description>k__BackingField: use to heal you
-  <InventoryItemPrefab>k__BackingField: {fileID: 2834935761823587789, guid: af9fa9768799f2042bc84d9b302c24d7, type: 3}
-  <ItemUI>k__BackingField: {fileID: 0}
+  <ItemSprite>k__BackingField: {fileID: 21300002, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  <MaximumAmount>k__BackingField: 2
