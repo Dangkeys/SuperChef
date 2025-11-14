@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7665957697508518551}
   - component: {fileID: 4747990091645161375}
   - component: {fileID: 7211884743859741425}
+  - component: {fileID: 90515463950829265}
   - component: {fileID: 4515760677146049876}
   m_Layer: 0
   m_Name: Ball
@@ -137,6 +138,31 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &90515463950829265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4615954903175476617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 860248776
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &4515760677146049876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,4 +175,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae64515f1b624144b1099c2683944a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   <InventoryItemSO>k__BackingField: {fileID: 11400000, guid: 8968838029139de43bfe45b73e7e5da3, type: 2}

@@ -7,8 +7,12 @@ public class PrototypeInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
+        SignalBusInstaller.Install(Container);
         Container.Bind<InventoryItemProvider>()
             .FromComponentInNewPrefab(inventoryItemProviderPrefab)
             .AsSingle().NonLazy();
+        Container.DeclareSignal<UIOpenSignal>();
+        Container.DeclareSignal<PlayerSpawnedSignal>();
+        Container.Bind<InputSignalReceiver>().AsSingle().NonLazy();
     }
 }

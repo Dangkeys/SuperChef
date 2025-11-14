@@ -9,8 +9,10 @@
   <Project Path="Zenject-Editor.csproj" />
   <Project Path="Zenject-IntegrationTests.csproj" />
   <Project Path="QFSW.QC.Editor.csproj" />
+  <Project Path="Signals.csproj" />
   <Project Path="Zenject-TestFramework.csproj" />
   <Project Path="QFSW.QC.Parsers.csproj" />
+  <Project Path="BetterHierarchyDemoScripts.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="Extenject.csproj" />
   <Project Path="QFSW.QC.Suggestors.csproj" />
@@ -18,16 +20,18 @@
   <Project Path="QFSW.QC.Serializers.csproj" />
   <Project Path="QFSW.QC.UI.csproj" />
   <Project Path="Zenject-PoolMonitor-Editor.csproj" />
+  <Project Path="Inventory.csproj" />
+  <Project Path="BetterHierarchy.csproj" />
   <Project Path="QFSW.QC.Demo.csproj" />
   <Project Path="QFSW.QC.Editor.Tools.csproj" />
   <Project Path="Sirenix.OdinInspector.Modules.UnityMathematics.csproj" />
+  <Project Path="UI.csproj" />
   <Project Path="QFSW.QC.ScanRules.csproj" />
-  <Project Path="PickUp.csproj" />
+  <Project Path="Building.csproj" />
   <Project Path="Scripts.csproj" />
   <Project Path="Networking.csproj" />
   <Project Path="InputSystem.csproj" />
-  <Project Path="Utilities.csproj" />
-  <Project Path="Inventory.csproj" />
+  <Project Path="InputSignalReceiver.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
 </Solution>

@@ -1,10 +1,10 @@
 using System;
 using Mono.CSharp;
+using NUnit.Framework.Internal;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
 
-// [RequireComponent(typeof(AutoInjectOnAwake))]
 public class PickUp : NetworkBehaviour
 {
     private GameInputReader inputReader;
@@ -12,12 +12,12 @@ public class PickUp : NetworkBehaviour
     [field: SerializeField] public Transform GrabPoint { get; private set; }
 
     [SerializeField] private float maxPickupDistance = 10f;
-    
+    [SerializeField] private LayerMask ghostLayerMask;
+
     [Inject]
     private void Init(GameInputReader inputReader)
     {
         this.inputReader = inputReader;
-
     }
     public override void OnNetworkSpawn()
     {
@@ -47,11 +47,10 @@ public class PickUp : NetworkBehaviour
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // center of screen
         Debug.DrawRay(ray.origin, ray.direction * maxPickupDistance, Color.cyan, 1f);
 
-        if (Physics.Raycast(ray, out var hit, maxPickupDistance))
+        if (Physics.Raycast(ray, out var hit, maxPickupDistance, ~ghostLayerMask))
         {
             if (hit.collider.TryGetComponent(out PickableObject pickable))
             {
-                // send pickup request to server
                 var objRef = new NetworkObjectReference(pickable.NetworkObject);
                 RequestPickUpServerRpc(objRef);
             }
@@ -61,11 +60,30 @@ public class PickUp : NetworkBehaviour
     [ServerRpc]
     private void RequestPickUpServerRpc(NetworkObjectReference pickableRef)
     {
-        if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickable))
+        
+        if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickableObject))
         {
-            pickable.SetPickUpParent(this);
+            netObj.TrySetParent(transform, true);
+            pickableObject.NotifyObjectPickedClientRpc();
+            NotifySetCurrentPickableChangedClientRpc(pickableRef);
         }
     }
+    [ClientRpc]
+    private void NotifySetCurrentPickableChangedClientRpc(NetworkObjectReference pickableRef)
+    {
+        if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickableObject))
+        {
+            CurrentPickableObject = pickableObject;
+            netObj.transform.localPosition = GrabPoint.transform.localPosition;
+            netObj.transform.localRotation = Quaternion.identity;
+        }
+    }
+    [ClientRpc]
+    private void NotifySetCurrentPickableToNullClientRpc()
+    {
+        CurrentPickableObject = null;
+    }
+
 
     private void DropObject()
     {
@@ -73,22 +91,18 @@ public class PickUp : NetworkBehaviour
         {
             var objRef = new NetworkObjectReference(CurrentPickableObject.NetworkObject);
             RequestDropServerRpc(objRef);
-            CurrentPickableObject = null;
+            
         }
     }
 
     [ServerRpc]
     private void RequestDropServerRpc(NetworkObjectReference pickableRef)
     {
-        if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickable))
+        if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickableObject))
         {
-            pickable.ClearPickUpParent();
+            netObj.TryRemoveParent();
+            pickableObject.NotifyObjectDroppedClientRpc();
+            NotifySetCurrentPickableToNullClientRpc();
         }
-    }
-
-    // called from PickableObject after pickup
-    public void SetCurrentPickable(PickableObject obj)
-    {
-        CurrentPickableObject = obj;
     }
 }

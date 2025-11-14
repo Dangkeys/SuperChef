@@ -1,66 +1,183 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using Unity.Netcode;
 
-public class Inventory : MonoBehaviour
+public class Inventory : NetworkBehaviour
 {
-    [field: SerializeField] public Stack<InventoryItemSO> inventoryItemSOs { get; private set; } = new Stack<InventoryItemSO>();
+    private const int MAX_SLOT_COUNT = 20;
+    public const int MAX_HOTBAR_SLOT_COUNT = 4;
+
+    public InventorySlot[] InventorySlots { get; private set; } = new InventorySlot[MAX_SLOT_COUNT];
+
+    [SerializeField]
+    private float maxPickupDistance = 10f;
+
     private GameInputReader inputReader;
     private InventoryItemProvider inventoryItemProvider;
+    [Range(0, MAX_HOTBAR_SLOT_COUNT - 1)]
+    public int SelectedInventorySlotIndex { get; private set; }
+    private PickUp pickUp;
+    public System.Action OnSelectedSlotIndexChanged;
 
+    private void Awake()
+    {
+        for (int i = 0; i < MAX_SLOT_COUNT; i++)
+        {
+            InventorySlots[i] = new InventorySlot();
+        }
+        SelectedInventorySlotIndex = 0;
+    }
 
-    [SerializeField] private float maxPickupDistance = 10f;
     [Inject]
-    private void Init(GameInputReader inputReader, InventoryItemProvider inventoryItemProvider)
+    private void Init(GameInputReader inputReader, InventoryItemProvider inventoryItemProvider, PickUp pickUp)
     {
         this.inputReader = inputReader;
         this.inventoryItemProvider = inventoryItemProvider;
-    }
-    private void Start()
-    {
-        inputReader.InteractEvent += OnTryAddToInventory;
-        inputReader.AttackEvent += TryPopStack;
-    }
-    private void OnDestroy()
-    {
-        inputReader.InteractEvent -= OnTryAddToInventory;
-        inputReader.AttackEvent -= TryPopStack;
+        this.pickUp = pickUp;
     }
 
 
 
-    private void OnTryAddToInventory()
+    public override void OnNetworkSpawn()
     {
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // center of screen
+        if (!IsOwner) return;
+        inputReader.InteractEvent += HandleInteract;
+        inputReader.NextEvent += NextSelectedSlot;
+        inputReader.PreviousEvent += PreviousSelectedSlot;
+    }
 
-        if (Physics.Raycast(ray, out var hit, maxPickupDistance))
+
+
+    public override void OnNetworkDespawn()
+    {
+        if (!IsOwner) return;
+        inputReader.InteractEvent -= HandleInteract;
+        inputReader.NextEvent -= NextSelectedSlot;
+        inputReader.PreviousEvent -= PreviousSelectedSlot;
+    }
+    private void NextSelectedSlot()
+    {
+        SelectedInventorySlotIndex = (SelectedInventorySlotIndex + 1) % MAX_HOTBAR_SLOT_COUNT;
+        OnSelectedSlotIndexChanged?.Invoke();
+    }
+
+    private void PreviousSelectedSlot()
+    {
+        SelectedInventorySlotIndex--;
+        if (SelectedInventorySlotIndex < 0)
+            SelectedInventorySlotIndex = MAX_HOTBAR_SLOT_COUNT - 1;
+        OnSelectedSlotIndexChanged?.Invoke();
+    }
+
+    private void HandleInteract()
+    {
+        if (!Camera.main) return;
+
+        var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+
+        if (!Physics.Raycast(ray, out var hit, maxPickupDistance)) return;
+        if (!hit.collider.TryGetComponent(out InventoryItem inventoryItem)) return;
+        if (!inventoryItem.TryGetComponent(out NetworkObject networkObject)) return;
+
+        var networkRef = new NetworkObjectReference(networkObject);
+        TryAddItemToInventory(inventoryItem, networkRef);
+    }
+
+    private void TryAddItemToInventory(InventoryItem inventoryItem, NetworkObjectReference networkRef)
+    {
+        var itemSO = inventoryItem.InventoryItemSO;
+        if (itemSO == null) return;
+
+        // 1️⃣ Try stacking with existing slot
+        foreach (var slot in InventorySlots)
         {
-            if (hit.collider.TryGetComponent(out InventoryItem inventoryItem))
-            {
-                inventoryItemSOs.Push(inventoryItem.InventoryItemSO);
-                Debug.Log(inventoryItemSOs);
-                Destroy(inventoryItem.gameObject);
-            }
+            if (slot.InventoryItemSO != itemSO) continue;
+            if (slot.CurrentAmount >= itemSO.MaximumAmount) continue;
+
+            slot.IncrementCurrentAmount();
+            DespawnItemServerRpc(networkRef);
+            return;
         }
 
-    }
-    private void TryPopStack()
-    {
-        if (inventoryItemSOs.Count > 0)
+        // 2️⃣ Try placing in empty slot
+        foreach (var slot in InventorySlots)
         {
-            InventoryItemSO inventoryItemSO = inventoryItemSOs.Pop();
-            Debug.Log("Drop " + inventoryItemSO.Name + "Its Detail is" + inventoryItemSO.Description);
+            if (slot.InventoryItemSO != null) continue;
 
-            InventoryItem itemPrefab = inventoryItemProvider.GetInventoryItemBySO(inventoryItemSO);
+            slot.SetInventoryItemSO(itemSO);
+            slot.SetCurrentAmount(1);
+            DespawnItemServerRpc(networkRef);
+            return;
+        }
+    }
+    public int GetSlotIndex(InventorySlot slot)
+    {
+        int index = System.Array.IndexOf(InventorySlots, slot);
+        if (index == -1)
+        {
+            throw new System.ArgumentException($"Slot not found in inventory", nameof(slot));
+        }
+        return index;
+    }
 
-            if (itemPrefab == null)
-            {
-                Debug.LogError($"InventoryItem prefab not found for SO: {inventoryItemSO.Name}", this);
-                return;
-            }
+    public void SwapInventorySlot(InventorySlot a, InventorySlot b)
+    {
 
-            float spawnOffest = 2.0f;
-            Instantiate(itemPrefab, transform.position + transform.forward * spawnOffest, Quaternion.identity);
+        if (a == null || b == null || a == b) return;
+
+        var tempSO = a.InventoryItemSO;
+        var tempAmount = a.CurrentAmount;
+
+        a.SetInventoryItemSO(b.InventoryItemSO);
+        a.SetCurrentAmount(b.CurrentAmount);
+
+        b.SetInventoryItemSO(tempSO);
+        b.SetCurrentAmount(tempAmount);
+    }
+
+
+    public void DropItem(InventorySlot slot)
+    {
+        if (slot.InventoryItemSO == null) return;
+
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-1f, 1f),
+            Random.Range(0f, 0.5f),
+            Random.Range(-1f, 1f)
+        );
+        Vector3 spawnPos = transform.position + transform.forward * 2f + randomOffset;
+        SpawnDroppedItemServerRpc(slot.InventoryItemSO.Name, spawnPos);
+        slot.DecrementCurrentAmount();
+    }
+
+    public void DecrementSelectedSlot()
+    {
+        InventorySlots[SelectedInventorySlotIndex].DecrementCurrentAmount();
+    }
+
+
+    [ServerRpc]
+    private void DespawnItemServerRpc(NetworkObjectReference objRef)
+    {
+        if (!objRef.TryGet(out NetworkObject netObj)) return;
+        if (netObj != null && netObj.IsSpawned)
+        {
+            netObj.Despawn(true);
+        }
+    }
+
+    [ServerRpc]
+    private void SpawnDroppedItemServerRpc(string itemSOName, Vector3 spawnPosition)
+    {
+        var itemSO = inventoryItemProvider.GetInventoryItemSOByName(itemSOName);
+        if (itemSO == null) return;
+
+        var prefab = inventoryItemProvider.GetInventoryItemBySO(itemSO);
+        var spawnedItem = Instantiate(prefab, spawnPosition, Quaternion.identity);
+
+        if (spawnedItem.TryGetComponent(out NetworkObject netObj))
+        {
+            netObj.Spawn();
         }
     }
 }

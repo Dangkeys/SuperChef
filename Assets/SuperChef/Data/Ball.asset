@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5c3a8b5d5985aa4f9163a3139853867, type: 3}
+  m_Name: Ball
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: Ball
+  <Description>k__BackingField: just for fun
+  <ItemSprite>k__BackingField: {fileID: 21300048, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  <MaximumAmount>k__BackingField: 1
