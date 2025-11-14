@@ -12,7 +12,10 @@ public class BuildableObject : InventoryItem
     {
         renderers = GetComponentsInChildren<Renderer>();
         rb = GetComponent<Rigidbody>();
+    }
+    [ClientRpc]
+    public void NotifyBuildingObjectPlacedClientRpc()
+    {
         rb.isKinematic = true;
     }
-
 }

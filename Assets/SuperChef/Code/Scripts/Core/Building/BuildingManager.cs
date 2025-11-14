@@ -30,7 +30,13 @@ public class BuildingManager : NetworkBehaviour
         if (!IsOwner) return;
         inputReader.AttackEvent += OnTryBuildObject;
         inventory.OnSelectedSlotIndexChanged += ChangeCurrentBuildable;
+        inventory.OnInventoryChanged += InventoryChanged;
         currentBuildableObjectSO = inventory.InventorySlots[0].InventoryItemSO as BuildableObjectSO;
+        StartVisualizeBuildableObject();
+    }
+
+    private void InventoryChanged()
+    {
         StartVisualizeBuildableObject();
     }
 
@@ -44,7 +50,10 @@ public class BuildingManager : NetworkBehaviour
         if (inputReader != null)
             inputReader.AttackEvent -= OnTryBuildObject;
         if (inventory != null)
+        {
             inventory.OnSelectedSlotIndexChanged -= ChangeCurrentBuildable;
+            inventory.OnInventoryChanged -= InventoryChanged;
+        }
         StopVisualizeBuildableObject();
     }
 
@@ -193,5 +202,11 @@ public class BuildingManager : NetworkBehaviour
         {
             newObj.NetworkObject.TrySetParent(latestParentable.transform);
         }
+
+        if(newObj.TryGetComponent(out BuildableObject buildableObject))
+        {
+            buildableObject.NotifyBuildingObjectPlacedClientRpc();
+        }
     }
+
 }

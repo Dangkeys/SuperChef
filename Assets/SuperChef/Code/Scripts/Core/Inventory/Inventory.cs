@@ -18,6 +18,7 @@ public class Inventory : NetworkBehaviour
     public int SelectedInventorySlotIndex { get; private set; }
     private PickUp pickUp;
     public System.Action OnSelectedSlotIndexChanged;
+    public System.Action OnInventoryChanged;
 
     private void Awake()
     {
@@ -44,9 +45,14 @@ public class Inventory : NetworkBehaviour
         inputReader.InteractEvent += HandleInteract;
         inputReader.NextEvent += NextSelectedSlot;
         inputReader.PreviousEvent += PreviousSelectedSlot;
+        inputReader.SlotChangedEvent += ChangeSelectedSlot;
     }
 
-
+    private void ChangeSelectedSlot(int slotIndex)
+    {
+        SelectedInventorySlotIndex = slotIndex;
+        OnSelectedSlotIndexChanged?.Invoke();
+    }
 
     public override void OnNetworkDespawn()
     {
@@ -54,6 +60,7 @@ public class Inventory : NetworkBehaviour
         inputReader.InteractEvent -= HandleInteract;
         inputReader.NextEvent -= NextSelectedSlot;
         inputReader.PreviousEvent -= PreviousSelectedSlot;
+        inputReader.SlotChangedEvent -= ChangeSelectedSlot;
     }
     private void NextSelectedSlot()
     {
@@ -96,6 +103,7 @@ public class Inventory : NetworkBehaviour
 
             slot.IncrementCurrentAmount();
             DespawnItemServerRpc(networkRef);
+            OnInventoryChanged?.Invoke();
             return;
         }
 
@@ -107,6 +115,7 @@ public class Inventory : NetworkBehaviour
             slot.SetInventoryItemSO(itemSO);
             slot.SetCurrentAmount(1);
             DespawnItemServerRpc(networkRef);
+            OnInventoryChanged?.Invoke();
             return;
         }
     }
@@ -133,6 +142,7 @@ public class Inventory : NetworkBehaviour
 
         b.SetInventoryItemSO(tempSO);
         b.SetCurrentAmount(tempAmount);
+        OnInventoryChanged?.Invoke();
     }
 
 
@@ -148,11 +158,13 @@ public class Inventory : NetworkBehaviour
         Vector3 spawnPos = transform.position + transform.forward * 2f + randomOffset;
         SpawnDroppedItemServerRpc(slot.InventoryItemSO.Name, spawnPos);
         slot.DecrementCurrentAmount();
+        OnInventoryChanged?.Invoke();
     }
 
     public void DecrementSelectedSlot()
     {
         InventorySlots[SelectedInventorySlotIndex].DecrementCurrentAmount();
+        OnInventoryChanged?.Invoke();
     }
 
 

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
@@ -17,6 +18,7 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
     public Action OpenInventoryEvent;
     public Action PreviousEvent;
     public Action NextEvent;
+    public Action<int> SlotChangedEvent;
 
     public InputActions InputActions { get; private set; }
     private InputActionMap[] defaultInputActionMap;
@@ -196,4 +198,13 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
     {
         throw new NotImplementedException();
     }
+
+    public void OnChangeSelectedSlot(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+
+        int slot = Mathf.RoundToInt(ctx.ReadValue<float>()) - 1;
+        SlotChangedEvent.Invoke(slot);
+    }
+
 }
