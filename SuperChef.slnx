@@ -9,6 +9,7 @@
   <Project Path="Zenject-Editor.csproj" />
   <Project Path="Zenject-IntegrationTests.csproj" />
   <Project Path="QFSW.QC.Editor.csproj" />
+  <Project Path="Signals.csproj" />
   <Project Path="Zenject-TestFramework.csproj" />
   <Project Path="QFSW.QC.Parsers.csproj" />
   <Project Path="BetterHierarchyDemoScripts.csproj" />
@@ -30,6 +31,7 @@
   <Project Path="Scripts.csproj" />
   <Project Path="Networking.csproj" />
   <Project Path="InputSystem.csproj" />
+  <Project Path="InputSignalReceiver.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
 </Solution>

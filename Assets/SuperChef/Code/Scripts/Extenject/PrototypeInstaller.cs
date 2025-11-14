@@ -11,6 +11,8 @@ public class PrototypeInstaller : MonoInstaller
         Container.Bind<InventoryItemProvider>()
             .FromComponentInNewPrefab(inventoryItemProviderPrefab)
             .AsSingle().NonLazy();
+        Container.DeclareSignal<UIOpenSignal>();
         Container.DeclareSignal<PlayerSpawnedSignal>();
+        Container.Bind<InputSignalReceiver>().AsSingle().NonLazy();
     }
 }

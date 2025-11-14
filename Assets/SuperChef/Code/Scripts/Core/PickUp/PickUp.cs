@@ -75,7 +75,7 @@ public class PickUp : NetworkBehaviour
         {
             CurrentPickableObject = pickableObject;
             netObj.transform.localPosition = GrabPoint.transform.localPosition;
-            netObj.transform.rotation = Quaternion.identity;
+            netObj.transform.localRotation = Quaternion.identity;
         }
     }
     [ClientRpc]

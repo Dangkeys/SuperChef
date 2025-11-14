@@ -1,13 +1,8 @@
 {
-    "name": "UI",
+    "name": "Signals",
     "rootNamespace": "",
     "references": [
-        "GUID:239426dc8e124a94390debc7d125c7d1",
-        "GUID:0d8beb7f090555447a6cf5ce9e54dbb4",
-        "GUID:1491147abca9d7d4bb7105af628b223e",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:eb6bb8760e766764fb5f1de97e508cd8",
-        "GUID:4d4de43a87365886c97737c06c332a2a"
+        "GUID:239426dc8e124a94390debc7d125c7d1"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

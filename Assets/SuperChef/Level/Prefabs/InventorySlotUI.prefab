@@ -59,7 +59,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -352,5 +352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681fc2b654877a14fbe0c5f3ed74286d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InventoryItemUI: {fileID: 3708937556303750157}
-  <BackgroundImage>k__BackingField: {fileID: 6657877046810188238}
+  inventoryItemUI: {fileID: 3708937556303750157}
+  unselectedSlotSprite: {fileID: 21300130, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  selectedSlotSprite: {fileID: 21300132, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}

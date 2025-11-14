@@ -30,6 +30,7 @@ public class PlayerMovement : NetworkBehaviour
     private void Init(GameInputReader inputReader)
     {
         this.inputReader = inputReader;
+        
     }
 
     void Awake()
@@ -48,7 +49,6 @@ public class PlayerMovement : NetworkBehaviour
         mainCamera.transform.SetParent(PlayerEyesTransform);
         mainCamera.transform.localPosition = Vector3.zero;
         cameraTransform = mainCamera.transform;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
 

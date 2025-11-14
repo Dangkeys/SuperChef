@@ -19,6 +19,7 @@ public class PlayerSpawnNotifier : NetworkBehaviour
         if (!IsOwner) return;
 
         // Fire the signal
+        Debug.Log("Fire player spawned");
         signalBus.Fire(new PlayerSpawnedSignal { Inventory = inventory });
     }
 }

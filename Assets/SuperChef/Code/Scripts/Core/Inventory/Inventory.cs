@@ -1,13 +1,11 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using Unity.Netcode;
-using log4net.Appender;
 
 public class Inventory : NetworkBehaviour
 {
     private const int MAX_SLOT_COUNT = 20;
-    public int MaxHotBarSlotAmount { get; private set; } = 4;
+    public const int MAX_HOTBAR_SLOT_COUNT = 4;
 
     public InventorySlot[] InventorySlots { get; private set; } = new InventorySlot[MAX_SLOT_COUNT];
 
@@ -16,8 +14,10 @@ public class Inventory : NetworkBehaviour
 
     private GameInputReader inputReader;
     private InventoryItemProvider inventoryItemProvider;
-    public InventorySlot SelectedInventorySlot { get; private set; }
+    [Range(0, MAX_HOTBAR_SLOT_COUNT - 1)]
+    public int SelectedInventorySlotIndex { get; private set; }
     private PickUp pickUp;
+    public System.Action OnSelectedSlotIndexChanged;
 
     private void Awake()
     {
@@ -25,6 +25,7 @@ public class Inventory : NetworkBehaviour
         {
             InventorySlots[i] = new InventorySlot();
         }
+        SelectedInventorySlotIndex = 0;
     }
 
     [Inject]
@@ -35,16 +36,37 @@ public class Inventory : NetworkBehaviour
         this.pickUp = pickUp;
     }
 
+
+
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
         inputReader.InteractEvent += HandleInteract;
+        inputReader.NextEvent += NextSelectedSlot;
+        inputReader.PreviousEvent += PreviousSelectedSlot;
     }
+
+
 
     public override void OnNetworkDespawn()
     {
         if (!IsOwner) return;
         inputReader.InteractEvent -= HandleInteract;
+        inputReader.NextEvent -= NextSelectedSlot;
+        inputReader.PreviousEvent -= PreviousSelectedSlot;
+    }
+    private void NextSelectedSlot()
+    {
+        SelectedInventorySlotIndex = (SelectedInventorySlotIndex + 1) % MAX_HOTBAR_SLOT_COUNT;
+        OnSelectedSlotIndexChanged?.Invoke();
+    }
+
+    private void PreviousSelectedSlot()
+    {
+        SelectedInventorySlotIndex--;
+        if (SelectedInventorySlotIndex < 0)
+            SelectedInventorySlotIndex = MAX_HOTBAR_SLOT_COUNT - 1;
+        OnSelectedSlotIndexChanged?.Invoke();
     }
 
     private void HandleInteract()
@@ -88,9 +110,19 @@ public class Inventory : NetworkBehaviour
             return;
         }
     }
+    public int GetSlotIndex(InventorySlot slot)
+    {
+        int index = System.Array.IndexOf(InventorySlots, slot);
+        if (index == -1)
+        {
+            throw new System.ArgumentException($"Slot not found in inventory", nameof(slot));
+        }
+        return index;
+    }
 
     public void SwapInventorySlot(InventorySlot a, InventorySlot b)
     {
+
         if (a == null || b == null || a == b) return;
 
         var tempSO = a.InventoryItemSO;
@@ -104,13 +136,23 @@ public class Inventory : NetworkBehaviour
     }
 
 
-    private void RemoveInventorySlotAndSpawn(InventorySlot slot)
+    public void DropItem(InventorySlot slot)
     {
         if (slot.InventoryItemSO == null) return;
 
-        Vector3 spawnPos = transform.position + transform.forward * 3f;
-        SpawnDroppedItemServerRpc(slot.InventoryItemSO.name, spawnPos);
-        slot.Reset();
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-1f, 1f),
+            Random.Range(0f, 0.5f),
+            Random.Range(-1f, 1f)
+        );
+        Vector3 spawnPos = transform.position + transform.forward * 2f + randomOffset;
+        SpawnDroppedItemServerRpc(slot.InventoryItemSO.Name, spawnPos);
+        slot.DecrementCurrentAmount();
+    }
+
+    public void DecrementSelectedSlot()
+    {
+        InventorySlots[SelectedInventorySlotIndex].DecrementCurrentAmount();
     }
 
 

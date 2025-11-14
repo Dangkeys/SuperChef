@@ -22,13 +22,20 @@ public class BuildingManager : NetworkBehaviour
     {
         this.inputReader = inputReader;
         this.inventory = inventory;
-        Debug.Log("Inventory" + this.inventory);
+
     }
 
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
         inputReader.AttackEvent += OnTryBuildObject;
+        inventory.OnSelectedSlotIndexChanged += ChangeCurrentBuildable;
+        currentBuildableObjectSO = inventory.InventorySlots[0].InventoryItemSO as BuildableObjectSO;
+        StartVisualizeBuildableObject();
+    }
+
+    private void ChangeCurrentBuildable()
+    {
         StartVisualizeBuildableObject();
     }
 
@@ -36,7 +43,8 @@ public class BuildingManager : NetworkBehaviour
     {
         if (inputReader != null)
             inputReader.AttackEvent -= OnTryBuildObject;
-
+        if (inventory != null)
+            inventory.OnSelectedSlotIndexChanged -= ChangeCurrentBuildable;
         StopVisualizeBuildableObject();
     }
 
@@ -49,6 +57,7 @@ public class BuildingManager : NetworkBehaviour
     private void StartVisualizeBuildableObject()
     {
         StopVisualizeBuildableObject();
+        currentBuildableObjectSO = inventory.InventorySlots[inventory.SelectedInventorySlotIndex].InventoryItemSO as BuildableObjectSO;
         if (currentBuildableObjectSO == null) return;
         visualizeBuildableObject = Instantiate(currentBuildableObjectSO.BuildableObjectGhostPrefab);
 
@@ -80,7 +89,7 @@ public class BuildingManager : NetworkBehaviour
             {
                 visualizeBuildableObject.gameObject.SetActive(true);
             }
-            
+
             visualizeBuildableObject.transform.position = hit.point;
             visualizeBuildableObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 
@@ -102,12 +111,12 @@ public class BuildingManager : NetworkBehaviour
 
     private void SetGhostMaterial()
     {
-            var renderers = visualizeBuildableObject.GetComponentsInChildren<Renderer>();
-            var mat = canPlaceHere ? canPlaceMaterial : canNotPlaceMaterial;
-            foreach (var r in renderers)
-            {
-                r.material = mat;
-            }
+        var renderers = visualizeBuildableObject.GetComponentsInChildren<Renderer>();
+        var mat = canPlaceHere ? canPlaceMaterial : canNotPlaceMaterial;
+        foreach (var r in renderers)
+        {
+            r.material = mat;
+        }
     }
 
     private bool IsOccupied(GameObject ghost)
@@ -138,7 +147,7 @@ public class BuildingManager : NetworkBehaviour
 
 
 
-   private void OnTryBuildObject()
+    private void OnTryBuildObject()
     {
         if (!canPlaceHere || currentBuildableObjectSO == null)
             return;
@@ -152,16 +161,17 @@ public class BuildingManager : NetworkBehaviour
         }
         else
         {
-        NetworkObjectReference parentRef = default;
-        if (latestParentable != null && latestParentable.TryGetComponent(out NetworkObject parentNetObj))
-        {
-            parentRef = parentNetObj;
+            NetworkObjectReference parentRef = default;
+            if (latestParentable != null && latestParentable.TryGetComponent(out NetworkObject parentNetObj))
+            {
+                parentRef = parentNetObj;
+            }
+
+            RequestSpawnServerRpc(placePos, placeRot, parentRef);
         }
 
-
-        RequestSpawnServerRpc(placePos, placeRot, parentRef);
-  
-        }
+        inventory.DecrementSelectedSlot();
+        StartVisualizeBuildableObject();
     }
 
     [ServerRpc]

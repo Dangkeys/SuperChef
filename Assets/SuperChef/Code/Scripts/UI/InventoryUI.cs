@@ -1,33 +1,69 @@
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
 
 public class InventoryUI : MonoBehaviour
 {
-    private Inventory inventory;
     [SerializeField] private Transform inventorySlotsParentTransform;
     [SerializeField] private Transform hotBarSlotsParentTransform;
+    [SerializeField] private GameObject showInventoryGameObject;
     [AssetsOnly]
     [SerializeField] private InventorySlotUI inventorySlotUIPrefab;
-
+    private Inventory inventory;
+    private GameInputReader inputReader;
+    public bool IsOpenInventory { get; private set; } = false;
+    private SignalBus signalBus;
+    private UIOpenSignal uIOpenSignal = new UIOpenSignal(UIType.Inventory);
     [Inject]
-    public void Construct(SignalBus signalBus)
+    public void Construct(SignalBus signalBus, GameInputReader gameInputReader)
     {
+        this.signalBus = signalBus;
         signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
-    }
 
+        inputReader = gameInputReader;
+        inputReader.OpenInventoryEvent += ToggleShowUI;
+        showInventoryGameObject.SetActive(IsOpenInventory);
+        
+    }
     private void OnPlayerSpawned(PlayerSpawnedSignal signal)
     {
         Init(signal.Inventory);
     }
-
-    public void Init(Inventory playerInventory)
+     public void Init(Inventory playerInventory)
     {
         inventory = playerInventory;
-        InitializeSlots();
+        
+
+        SetupInventorySlots();
     }
 
-    private void InitializeSlots()
+    private void ToggleShowUI()
+    {
+        IsOpenInventory = !IsOpenInventory;
+        showInventoryGameObject.SetActive(IsOpenInventory);
+
+        uIOpenSignal.IsOpen = IsOpenInventory;
+        signalBus.Fire(uIOpenSignal);
+
+    }
+
+    void OnDestroy()
+    {
+        if(signalBus != null)
+        {
+            signalBus.TryUnsubscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
+        }
+
+        if (inputReader == null) return;
+        inputReader.OpenInventoryEvent -= ToggleShowUI;
+    }
+
+
+
+   
+
+    private void SetupInventorySlots()
     {
         // Clear existing slots
         foreach (Transform child in inventorySlotsParentTransform)
@@ -43,10 +79,10 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < inventory.InventorySlots.Length; i++)
         {
             var inventorySlot = inventory.InventorySlots[i];
-            var parent = i < inventory.MaxHotBarSlotAmount ? hotBarSlotsParentTransform : inventorySlotsParentTransform;
+            var parent = i < Inventory.MAX_HOTBAR_SLOT_COUNT ? hotBarSlotsParentTransform : inventorySlotsParentTransform;
 
             var inventorySlotUI = Instantiate(inventorySlotUIPrefab, parent);
-            inventorySlotUI.Init(inventorySlot);
+            inventorySlotUI.Initialize(inventorySlot, inventory);
         }
     }
 }
