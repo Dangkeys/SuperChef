@@ -30,6 +30,8 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         backgroundImage = GetComponent<Image>();
         backgroundImage.sprite = unselectedSlotSprite;
+        VisulizeSelectedSlot();
+
         inventoryItemUI.Init(slot);
 
         canvas = GetComponentInParent<Canvas>();

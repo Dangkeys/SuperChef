@@ -6,7 +6,7 @@ public class BuildableObject : InventoryItem
     private Renderer[] renderers;
     private Material originalMaterial;
     private Rigidbody rb;
-    [field:SerializeField] public LayerMask  ActiveLayerMask { get; private set; }
+    [field: SerializeField] public LayerMask ActiveLayerMask { get; private set; }
 
     private void Awake()
     {
@@ -18,4 +18,5 @@ public class BuildableObject : InventoryItem
     {
         rb.isKinematic = true;
     }
+
 }

@@ -85,6 +85,7 @@ public class Inventory : NetworkBehaviour
         if (!Physics.Raycast(ray, out var hit, maxPickupDistance)) return;
         if (!hit.collider.TryGetComponent(out InventoryItem inventoryItem)) return;
         if (!inventoryItem.TryGetComponent(out NetworkObject networkObject)) return;
+        if (inventoryItem.GetComponentInParent<Parentable>() != null) return; // this need to be remove later it should check for the layermask instead
 
         var networkRef = new NetworkObjectReference(networkObject);
         TryAddItemToInventory(inventoryItem, networkRef);

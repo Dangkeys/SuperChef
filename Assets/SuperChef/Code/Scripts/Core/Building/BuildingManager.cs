@@ -203,7 +203,7 @@ public class BuildingManager : NetworkBehaviour
             newObj.NetworkObject.TrySetParent(latestParentable.transform);
         }
 
-        if(newObj.TryGetComponent(out BuildableObject buildableObject))
+        if (newObj.TryGetComponent(out BuildableObject buildableObject))
         {
             buildableObject.NotifyBuildingObjectPlacedClientRpc();
         }
