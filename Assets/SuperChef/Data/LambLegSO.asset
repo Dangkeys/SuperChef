@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7979e85c91e8b9f46a7268a0d0db1f46, type: 3}
-  m_Name: Lamb Leg
+  m_Name: LambLegSO
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Lamb Leg
   <Description>k__BackingField: Lamb

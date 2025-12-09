@@ -1026,8 +1026,30 @@
         {
             "name": "Global",
             "id": "61f5e74d-8f52-4f0f-8bbe-1c49130caf90",
-            "actions": [],
-            "bindings": []
+            "actions": [
+                {
+                    "name": "OpenSettings",
+                    "type": "Button",
+                    "id": "9d7155e5-c457-4ccf-b161-856ab078ab00",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f2ad74f3-189b-4105-9ec5-8a8a5222e275",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenSettings",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         },
         {
             "name": "GameScene",

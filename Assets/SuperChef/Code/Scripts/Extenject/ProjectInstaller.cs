@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 using Zenject;
 public class ProjectInstaller : MonoInstaller
 {
+    [SerializeField] private SettingsHandler settingsHandler;
     public override void InstallBindings()
     {
         // Example: services that should auto-run
         Container.BindInterfacesTo<GameBootFlow>().AsSingle(); // IInitializable/ITickable/etc.
         Container.Bind<GameInputReader>().AsSingle().NonLazy();
         Container.Bind<InputActions>().AsSingle().NonLazy();
+        Container.Bind<SettingsHandler>().FromInstance(settingsHandler).AsSingle().NonLazy();
     }
 }
 

@@ -1,15 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSceneActions, InputActions.IUIActions, IDisposable
+public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSceneActions, InputActions.IUIActions, InputActions.IGlobalActions, IDisposable
 {
     public Action<Vector2> MoveEvent;
     public Action JumpEvent;
     public Action<Vector2> LookEvent;
 
+    public Action OpenSettingEvent;
     public Action AttackEvent;
 
     public Action CrouchEvent;
@@ -30,8 +32,10 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
         defaultInputActionMap = new InputActionMap[] { InputActions.GameScene, InputActions.Global };
         InputActions.GameScene.SetCallbacks(this);
         InputActions.Player.SetCallbacks(this);
+        InputActions.Global.SetCallbacks(this);
         InputActions.Player.Enable();
         InputActions.GameScene.Enable();
+        InputActions.Global.Enable();
 
     }
 
@@ -207,4 +211,9 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
         SlotChangedEvent.Invoke(slot);
     }
 
+    public void OnOpenSettings(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            OpenSettingEvent?.Invoke();
+    }
 }

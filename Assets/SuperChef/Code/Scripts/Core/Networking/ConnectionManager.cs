@@ -2,7 +2,7 @@ using QFSW.QC;
 using Unity.Netcode;
 using UnityEngine;
 
-public class NetcodeManager: MonoBehaviour
+public class ConnectionManager: MonoBehaviour
 {
     [Command]
     private void StartHost()

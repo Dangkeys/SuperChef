@@ -1112,8 +1112,30 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             ""name"": ""Global"",
             ""id"": ""61f5e74d-8f52-4f0f-8bbe-1c49130caf90"",
-            ""actions"": [],
-            ""bindings"": []
+            ""actions"": [
+                {
+                    ""name"": ""OpenSettings"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d7155e5-c457-4ccf-b161-856ab078ab00"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f2ad74f3-189b-4105-9ec5-8a8a5222e275"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenSettings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         },
         {
             ""name"": ""GameScene"",
@@ -1233,6 +1255,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         // Global
         m_Global = asset.FindActionMap("Global", throwIfNotFound: true);
+        m_Global_OpenSettings = m_Global.FindAction("OpenSettings", throwIfNotFound: true);
         // GameScene
         m_GameScene = asset.FindActionMap("GameScene", throwIfNotFound: true);
         m_GameScene_Inventory = m_GameScene.FindAction("Inventory", throwIfNotFound: true);
@@ -1709,6 +1732,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     // Global
     private readonly InputActionMap m_Global;
     private List<IGlobalActions> m_GlobalActionsCallbackInterfaces = new List<IGlobalActions>();
+    private readonly InputAction m_Global_OpenSettings;
     /// <summary>
     /// Provides access to input actions defined in input action map "Global".
     /// </summary>
@@ -1720,6 +1744,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public GlobalActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Global/OpenSettings".
+        /// </summary>
+        public InputAction @OpenSettings => m_Wrapper.m_Global_OpenSettings;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1746,6 +1774,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GlobalActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GlobalActionsCallbackInterfaces.Add(instance);
+            @OpenSettings.started += instance.OnOpenSettings;
+            @OpenSettings.performed += instance.OnOpenSettings;
+            @OpenSettings.canceled += instance.OnOpenSettings;
         }
 
         /// <summary>
@@ -1757,6 +1788,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="GlobalActions" />
         private void UnregisterCallbacks(IGlobalActions instance)
         {
+            @OpenSettings.started -= instance.OnOpenSettings;
+            @OpenSettings.performed -= instance.OnOpenSettings;
+            @OpenSettings.canceled -= instance.OnOpenSettings;
         }
 
         /// <summary>
@@ -2114,6 +2148,13 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     /// <seealso cref="GlobalActions.RemoveCallbacks(IGlobalActions)" />
     public interface IGlobalActions
     {
+        /// <summary>
+        /// Method invoked when associated input action "OpenSettings" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOpenSettings(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GameScene" which allows adding and removing callbacks.
