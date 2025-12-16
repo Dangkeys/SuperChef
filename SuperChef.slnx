@@ -35,6 +35,7 @@
   <Project Path="AssetInventory.Examples.csproj" />
   <Project Path="InputSystem.csproj" />
   <Project Path="InputSignalReceiver.csproj" />
+  <Project Path="Holding.csproj" />
   <Project Path="CodeStage.Package2Folder.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Networking.csproj" />
