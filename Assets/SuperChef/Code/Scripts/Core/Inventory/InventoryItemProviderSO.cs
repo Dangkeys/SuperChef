@@ -57,7 +57,7 @@ public class InventoryItemProviderSO : ScriptableObject
         return soToInventoryItemDict.TryGetValue(so, out var item) ? item : null;
     }
 
-    public InventoryItemSO GetInventoryItemSOByName(string name)
+    public InventoryItemSO GetInventoryItemSOByID(string id)
     {
         if (soToInventoryItemDict == null) InitializeDictionary();
 
@@ -67,7 +67,7 @@ public class InventoryItemProviderSO : ScriptableObject
         {
             // Assuming InventoryItemSO has a "Name" property. 
             // If it's the asset name, use item.name
-            if (item.Name == name) 
+            if (item.ID == id) 
                 return item;
         }
         return null;

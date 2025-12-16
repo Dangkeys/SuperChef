@@ -56,7 +56,7 @@ public class HoldableProvider : NetworkBehaviour
         return soToHoldableObjectDict.TryGetValue(so, out var item) ? item : null;
     }
 
-    public HoldableItemSO GetInventoryItemSOByName(string name)
+    public HoldableItemSO GetInventoryItemSOByID(string id)
     {
         if (soToHoldableObjectDict == null) InitializeDictionary();
 
@@ -66,29 +66,29 @@ public class HoldableProvider : NetworkBehaviour
         {
             // Assuming InventoryItemSO has a "Name" property. 
             // If it's the asset name, use item.name
-            if (item.Name == name)
+            if (item.ID == id)
                 return item;
         }
         return null;
     }
-    public void VisualizeHoldableItem(string holdableItemName)
+    public void VisualizeHoldableItem(string holdableId)
     {
         foreach (var entry in soToHoldableObjectDict)
         {
             HoldableItemSO item = entry.Key;
             GameObject holdableObject = entry.Value;
-            holdableObject.SetActive(item.Name == holdableItemName);
+            holdableObject.SetActive(item.ID == holdableId);
         }
     }
 
     [ServerRpc]
-    public void RequestToSetActiveHoldableServerRpc(string holdableItemName)
+    public void RequestToSetActiveHoldableServerRpc(string holdableID)
     {
-        NotifyToSetActiveHoldableClientRpc(holdableItemName);
+        NotifyToSetActiveHoldableClientRpc(holdableID);
     }
     [ClientRpc]
-    private void NotifyToSetActiveHoldableClientRpc(string holdableItemName)
+    private void NotifyToSetActiveHoldableClientRpc(string holdableID)
     {
-        VisualizeHoldableItem(holdableItemName);
+        VisualizeHoldableItem(holdableID);
     }
 }

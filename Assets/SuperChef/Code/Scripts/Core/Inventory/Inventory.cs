@@ -157,7 +157,7 @@ public class Inventory : NetworkBehaviour
             Random.Range(-1f, 1f)
         );
         Vector3 spawnPos = transform.position + transform.forward * 2f + randomOffset;
-        SpawnDroppedItemServerRpc(slot.InventoryItemSO.Name, spawnPos);
+        SpawnDroppedItemServerRpc(slot.InventoryItemSO.ID, spawnPos);
         slot.DecrementCurrentAmount();
         OnInventoryChanged?.Invoke();
     }
@@ -180,9 +180,9 @@ public class Inventory : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void SpawnDroppedItemServerRpc(string itemSOName, Vector3 spawnPosition)
+    private void SpawnDroppedItemServerRpc(string itemSOID, Vector3 spawnPosition)
     {
-        var itemSO = inventoryItemProvider.GetInventoryItemSOByName(itemSOName);
+        var itemSO = inventoryItemProvider.GetInventoryItemSOByID(itemSOID);
         if (itemSO == null) return;
 
         var prefab = inventoryItemProvider.GetInventoryItemBySO(itemSO);

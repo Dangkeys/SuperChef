@@ -35,7 +35,7 @@ public class HoldableManager : NetworkBehaviour
     private void StartVisualizeHoldable()
     {
         currentHoldableItemSO = inventory.InventorySlots[inventory.SelectedInventorySlotIndex].InventoryItemSO  as HoldableItemSO;
-        holdableProvider.RequestToSetActiveHoldableServerRpc(currentHoldableItemSO?.Name ?? "");
+        holdableProvider.RequestToSetActiveHoldableServerRpc(currentHoldableItemSO?.ID ?? "");
     }
 
 }
