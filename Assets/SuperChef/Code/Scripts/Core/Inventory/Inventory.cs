@@ -13,7 +13,7 @@ public class Inventory : NetworkBehaviour
     private float maxPickupDistance = 10f;
 
     private GameInputReader inputReader;
-    private InventoryItemProvider inventoryItemProvider;
+    private InventoryItemProviderSO inventoryItemProvider;
     [Range(0, MAX_HOTBAR_SLOT_COUNT - 1)]
     public int SelectedInventorySlotIndex { get; private set; }
     private PickUp pickUp;
@@ -30,7 +30,7 @@ public class Inventory : NetworkBehaviour
     }
 
     [Inject]
-    private void Init(GameInputReader inputReader, InventoryItemProvider inventoryItemProvider, PickUp pickUp)
+    private void Init(GameInputReader inputReader, InventoryItemProviderSO inventoryItemProvider, PickUp pickUp)
     {
         this.inputReader = inputReader;
         this.inventoryItemProvider = inventoryItemProvider;

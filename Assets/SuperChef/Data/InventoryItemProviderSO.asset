@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2993786b27b0974cacca5c34128224c, type: 3}
+  m_Name: InventoryItemProviderSO
+  m_EditorClassIdentifier: 
+  inventoryItemEntries:
+  - <ItemSO>k__BackingField: {fileID: 11400000, guid: 8968838029139de43bfe45b73e7e5da3, type: 2}
+    <Item>k__BackingField: {fileID: 4515760677146049876, guid: 6faffe01a1eaa9e4aa4b233335461ca0, type: 3}
+  - <ItemSO>k__BackingField: {fileID: 11400000, guid: 562ade20a37a1284e96c4f2718d1957f, type: 2}
+    <Item>k__BackingField: {fileID: 6519277559377262054, guid: ea15949ced583f44589257fc3c66b6b7, type: 3}
+  - <ItemSO>k__BackingField: {fileID: 11400000, guid: bdeb99399c04c9a4086c54fe3d3a6d96, type: 2}
+    <Item>k__BackingField: {fileID: -500244039734025076, guid: 8dc465f46b6c8b242be3b0a23bd18bf1, type: 3}
+  - <ItemSO>k__BackingField: {fileID: 11400000, guid: 6dbea9b66b2d65e4aaea25e97ab6a012, type: 2}
+    <Item>k__BackingField: {fileID: 3620043202881567110, guid: af9fa9768799f2042bc84d9b302c24d7, type: 3}
