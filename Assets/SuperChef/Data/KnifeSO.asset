@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd07f1026c720b9439264984f028724b, type: 3}
   m_Name: KnifeSO
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: 555b0791-523a-4267-b74f-66df1d02f58c
   <Name>k__BackingField: Knife
   <Description>k__BackingField: Knife
   <ItemSprite>k__BackingField: {fileID: 21300024, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}

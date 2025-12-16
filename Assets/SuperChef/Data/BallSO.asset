@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c3a8b5d5985aa4f9163a3139853867, type: 3}
   m_Name: BallSO
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: 2a6ceb37-1b40-4331-8615-d90eeb3adeda
   <Name>k__BackingField: Ball
   <Description>k__BackingField: just for fun
   <ItemSprite>k__BackingField: {fileID: 21300048, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7979e85c91e8b9f46a7268a0d0db1f46, type: 3}
   m_Name: LambLegSO
   m_EditorClassIdentifier: 
+  <ID>k__BackingField: b13e4350-280c-48df-8802-bcb2b30348fb
   <Name>k__BackingField: Lamb Leg
   <Description>k__BackingField: Lamb
   <ItemSprite>k__BackingField: {fileID: 21300192, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
