@@ -1,0 +1,16 @@
+OVDF v1.1
+BuildableObjectSO, Building
+MetaGuid:7979e85c91e8b9f46a7268a0d0db1f46
+
+# <BuildableObjectGhostPrefab>k__BackingField
+Position: $FNH7jswVnxHg2azK3tLewb:1
++ [Sirenix.OdinInspector.AssetsOnlyAttribute]
++ [Sirenix.OdinInspector.PreviewFieldAttribute]
+	Height = 80.35
++ [Sirenix.OdinInspector.LabelWidthAttribute]
+
+# <BuildableObject>k__BackingField
+Position: $CUwjQRi1y8jpvQvKVUN56w:4
++ [Sirenix.OdinInspector.PreviewFieldAttribute]
+	Height = 84.78
++ [Sirenix.OdinInspector.AssetsOnlyAttribute]

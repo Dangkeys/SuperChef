@@ -1,0 +1,42 @@
+OVDF v1.1
+InventoryItemSO, Inventory
+MetaGuid:b5c3a8b5d5985aa4f9163a3139853867
+
+# $FyazKAP5xte3YW4gnuqR6Z
+Position: $root:18
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+
+# $CUwjQRi1y8jpvQvKVUN56w
+Position: $NdUVcUYh3T5UeyAn6ELFeh:0
++ [Sirenix.OdinInspector.VerticalGroupAttribute]
+
+# $68V4eJcJZQYYs6z6Q8jy9n
+Position: $FyazKAP5xte3YW4gnuqR6Z:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $NdUVcUYh3T5UeyAn6ELFeh
+Position: $68V4eJcJZQYYs6z6Q8jy9n:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $FNH7jswVnxHg2azK3tLewb
+Position: $68V4eJcJZQYYs6z6Q8jy9n:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# <ItemSprite>k__BackingField
+Position: $FNH7jswVnxHg2azK3tLewb:0
++ [Sirenix.OdinInspector.PreviewFieldAttribute]
+	Height = 80
+	FilterMode = Bilinear
++ [Sirenix.OdinInspector.AssetsOnlyAttribute]
+
+# <Name>k__BackingField
+Position: $CUwjQRi1y8jpvQvKVUN56w:1
+
+# <Description>k__BackingField
+Position: $CUwjQRi1y8jpvQvKVUN56w:2
+
+# <MaximumAmount>k__BackingField
+Position: $CUwjQRi1y8jpvQvKVUN56w:3
+
+# <ID>k__BackingField
+Position: $CUwjQRi1y8jpvQvKVUN56w:0
