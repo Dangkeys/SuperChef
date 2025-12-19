@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd07f1026c720b9439264984f028724b, type: 3}
+  m_Script: {fileID: 11500000, guid: b5c3a8b5d5985aa4f9163a3139853867, type: 3}
   m_Name: KnifeSO
-  m_EditorClassIdentifier: 
-  <ID>k__BackingField: 555b0791-523a-4267-b74f-66df1d02f58c
+  m_EditorClassIdentifier: Inventory::InventoryItemSO
+  <ID>k__BackingField: 6aa36e1b-e35f-4e46-ba4c-bcd61f174b94
   <Name>k__BackingField: Knife
-  <Description>k__BackingField: Knife
+  <Description>k__BackingField: 
   <ItemSprite>k__BackingField: {fileID: 21300024, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
   <MaximumAmount>k__BackingField: 1

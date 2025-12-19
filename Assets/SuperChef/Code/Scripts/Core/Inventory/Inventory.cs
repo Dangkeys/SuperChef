@@ -42,7 +42,6 @@ public class Inventory : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
-        inputReader.InteractEvent += HandleInteract;
         inputReader.NextEvent += NextSelectedSlot;
         inputReader.PreviousEvent += PreviousSelectedSlot;
         inputReader.SlotChangedEvent += ChangeSelectedSlot;
@@ -57,7 +56,6 @@ public class Inventory : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         if (!IsOwner) return;
-        inputReader.InteractEvent -= HandleInteract;
         inputReader.NextEvent -= NextSelectedSlot;
         inputReader.PreviousEvent -= PreviousSelectedSlot;
         inputReader.SlotChangedEvent -= ChangeSelectedSlot;
@@ -76,8 +74,9 @@ public class Inventory : NetworkBehaviour
         OnSelectedSlotIndexChanged?.Invoke();
     }
 
-    private void HandleInteract()
+    public void PerformInteraction()
     {
+        if (pickUp.CurrentPickableObject != null) return;
         if (!Camera.main) return;
 
         var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -85,8 +84,7 @@ public class Inventory : NetworkBehaviour
         if (!Physics.Raycast(ray, out var hit, maxPickupDistance)) return;
         if (!hit.collider.TryGetComponent(out InventoryItem inventoryItem)) return;
         if (!inventoryItem.TryGetComponent(out NetworkObject networkObject)) return;
-        if (pickUp.CurrentPickableObject != null) return;
-        
+
         var networkRef = new NetworkObjectReference(networkObject);
         TryAddItemToInventory(inventoryItem, networkRef);
     }
@@ -157,6 +155,7 @@ public class Inventory : NetworkBehaviour
             Random.Range(-1f, 1f)
         );
         Vector3 spawnPos = transform.position + transform.forward * 2f + randomOffset;
+
         SpawnDroppedItemServerRpc(slot.InventoryItemSO.ID, spawnPos);
         slot.DecrementCurrentAmount();
         OnInventoryChanged?.Invoke();
@@ -186,7 +185,8 @@ public class Inventory : NetworkBehaviour
         if (itemSO == null) return;
 
         var prefab = inventoryItemProvider.GetInventoryItemBySO(itemSO);
-        var spawnedItem = Instantiate(prefab, spawnPosition, Quaternion.identity);
+        var spawnedItem = Instantiate(prefab, spawnPosition, Quaternion.Euler(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f)));
+
 
         if (spawnedItem.TryGetComponent(out NetworkObject netObj))
         {

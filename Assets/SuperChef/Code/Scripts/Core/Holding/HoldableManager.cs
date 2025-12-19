@@ -8,34 +8,39 @@ using Zenject;
 
 public class HoldableManager : NetworkBehaviour
 {
-    private HoldableItemSO currentHoldableItemSO;
+    private InventoryItemSO currentInventoryItemSO;
     private Inventory inventory;
+    private PickUp pickUp;
     private GameObject visualizeHoldableObject;
 
     [SerializeField] private HoldableProvider holdableProvider;
     [Inject]
-    private void Init(Inventory inventory)
+    private void Init(Inventory inventory, PickUp pickUp)
     {
         this.inventory = inventory;
-        currentHoldableItemSO = inventory.InventorySlots[0].InventoryItemSO as HoldableItemSO;
-        inventory.OnSelectedSlotIndexChanged += ChangeCurrentHoldable;
-        inventory.OnInventoryChanged += InventoryChanged;
+        this.pickUp = pickUp;
+        currentInventoryItemSO = inventory.InventorySlots[0].InventoryItemSO;
+        inventory.OnSelectedSlotIndexChanged += StartVisualizeHoldable;
+        inventory.OnInventoryChanged += StartVisualizeHoldable;
     }
-
-    private void ChangeCurrentHoldable()
+    public override void OnNetworkSpawn()
     {
-        StartVisualizeHoldable();
+        if (!IsOwner) return;
+        pickUp.OnCurrentPickableObjectChanged += StartVisualizeHoldable;
     }
-
-    private void InventoryChanged()
+    public override void OnNetworkDespawn()
     {
-        StartVisualizeHoldable();
+        inventory.OnSelectedSlotIndexChanged -= StartVisualizeHoldable;
+        inventory.OnInventoryChanged -= StartVisualizeHoldable;
+        if (!IsOwner) return;
+        pickUp.OnCurrentPickableObjectChanged -= StartVisualizeHoldable;
+
     }
 
     private void StartVisualizeHoldable()
     {
-        currentHoldableItemSO = inventory.InventorySlots[inventory.SelectedInventorySlotIndex].InventoryItemSO  as HoldableItemSO;
-        holdableProvider.RequestToSetActiveHoldableServerRpc(currentHoldableItemSO?.ID ?? "");
+        currentInventoryItemSO = inventory.InventorySlots[inventory.SelectedInventorySlotIndex].InventoryItemSO;
+        holdableProvider.RequestToSetActiveHoldableServerRpc(pickUp.CurrentPickableObject == null ? (currentInventoryItemSO?.ID ?? "") : "");
     }
 
 }

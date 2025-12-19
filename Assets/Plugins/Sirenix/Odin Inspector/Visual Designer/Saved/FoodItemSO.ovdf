@@ -1,0 +1,14 @@
+OVDF v1.1
+FoodItemSO, Cooking
+MetaGuid:ce0d8ad6e34bd6f419c71d97b4188465
+
+# <BuildableObjectGhostPrefab>k__BackingField
+Position: $FNH7jswVnxHg2azK3tLewb:1
++ [Sirenix.OdinInspector.PreviewFieldAttribute]
+	Height = 79.87
++ [Sirenix.OdinInspector.AssetsOnlyAttribute]
++ [Sirenix.OdinInspector.LabelWidthAttribute]
+
+# <BuildableObject>k__BackingField
+Position: $CUwjQRi1y8jpvQvKVUN56w:4
++ [Sirenix.OdinInspector.AssetsOnlyAttribute]

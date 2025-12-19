@@ -52,7 +52,7 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started)
             InteractEvent?.Invoke();
     }
 

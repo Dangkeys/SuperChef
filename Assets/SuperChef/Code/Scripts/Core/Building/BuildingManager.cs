@@ -17,12 +17,13 @@ public class BuildingManager : NetworkBehaviour
     private bool canPlaceHere;
     private Inventory inventory;
 
+    private InventoryItemProviderSO inventoryItemProviderSO;
     [Inject]
-    private void Init(GameInputReader inputReader, Inventory inventory)
+    private void Init(GameInputReader inputReader, Inventory inventory, InventoryItemProviderSO inventoryItemProviderSO)
     {
         this.inputReader = inputReader;
         this.inventory = inventory;
-
+        this.inventoryItemProviderSO = inventoryItemProviderSO;
     }
 
     public override void OnNetworkSpawn()
@@ -163,10 +164,10 @@ public class BuildingManager : NetworkBehaviour
 
         Vector3 placePos = visualizeBuildableObject.transform.position;
         Quaternion placeRot = visualizeBuildableObject.transform.rotation;
-
+        string buildableObjectSOID = currentBuildableObjectSO.ID;
         if (IsServer)
         {
-            SpawnObject(placePos, placeRot);
+            SpawnObject(buildableObjectSOID, placePos, placeRot);
         }
         else
         {
@@ -176,7 +177,7 @@ public class BuildingManager : NetworkBehaviour
                 parentRef = parentNetObj;
             }
 
-            RequestSpawnServerRpc(placePos, placeRot, parentRef);
+            RequestSpawnServerRpc(buildableObjectSOID, placePos, placeRot, parentRef);
         }
 
         inventory.DecrementSelectedSlot();
@@ -184,14 +185,16 @@ public class BuildingManager : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void RequestSpawnServerRpc(Vector3 position, Quaternion rotation, NetworkObjectReference parentRef)
+    private void RequestSpawnServerRpc(string buildableObjectSOID, Vector3 position, Quaternion rotation, NetworkObjectReference parentRef)
     {
-        SpawnObject(position, rotation, parentRef);
+        SpawnObject(buildableObjectSOID, position, rotation, parentRef);
     }
 
-    private void SpawnObject(Vector3 position, Quaternion rotation, NetworkObjectReference parentRef = default)
+    private void SpawnObject(string buildableObjectSOID, Vector3 position, Quaternion rotation, NetworkObjectReference parentRef = default)
     {
-        var newObj = Instantiate(currentBuildableObjectSO.BuildableObject, position, rotation);
+        BuildableObjectSO buildableObjectSO = inventoryItemProviderSO.GetInventoryItemSOByID(buildableObjectSOID) as BuildableObjectSO;
+        if (buildableObjectSO == null) return;
+        var newObj = Instantiate(buildableObjectSO.BuildableObject, position, rotation);
         newObj.NetworkObject.Spawn(true);
 
         if (parentRef.TryGet(out NetworkObject parentNetworkObject))

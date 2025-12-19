@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class BuildableObject : InventoryItem
 {
     private Renderer[] renderers;

@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7979e85c91e8b9f46a7268a0d0db1f46, type: 3}
+  m_Script: {fileID: 11500000, guid: ce0d8ad6e34bd6f419c71d97b4188465, type: 3}
   m_Name: LambLegSO
-  m_EditorClassIdentifier: 
-  <ID>k__BackingField: b13e4350-280c-48df-8802-bcb2b30348fb
-  <Name>k__BackingField: Lamb Leg
-  <Description>k__BackingField: Lamb
+  m_EditorClassIdentifier: Cooking::FoodItemSO
+  <ID>k__BackingField: 1c927b2a-56fc-44d3-a7ce-b71926fe878e
+  <Name>k__BackingField: LambLeg
+  <Description>k__BackingField: LambLeg
   <ItemSprite>k__BackingField: {fileID: 21300192, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
-  <MaximumAmount>k__BackingField: 3
+  <MaximumAmount>k__BackingField: 1
   <BuildableObject>k__BackingField: {fileID: -500244039734025076, guid: 8dc465f46b6c8b242be3b0a23bd18bf1, type: 3}
   <BuildableObjectGhostPrefab>k__BackingField: {fileID: 2629127272418962556, guid: 493d169d854017c4e99ca196b03832e3, type: 3}

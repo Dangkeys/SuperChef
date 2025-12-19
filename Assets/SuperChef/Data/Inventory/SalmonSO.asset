@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce0d8ad6e34bd6f419c71d97b4188465, type: 3}
+  m_Name: SalmonSO
+  m_EditorClassIdentifier: Cooking::FoodItemSO
+  <ID>k__BackingField: 0b1e7661-46ca-4d61-99b7-452ed0c11037
+  <Name>k__BackingField: Salmon
+  <Description>k__BackingField: 
+  <ItemSprite>k__BackingField: {fileID: 21300194, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  <MaximumAmount>k__BackingField: 2
+  <BuildableObject>k__BackingField: {fileID: -8293308145382676582, guid: 0a7b7b2bc2a5cb14eb335b61f44f6b31, type: 3}
+  <BuildableObjectGhostPrefab>k__BackingField: {fileID: 3013781730304102513, guid: f9334dfacd8798343bec862ebbf13317, type: 3}

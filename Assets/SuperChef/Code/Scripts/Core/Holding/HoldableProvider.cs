@@ -6,7 +6,7 @@ using Unity.Netcode;
 [System.Serializable]
 public class HoldableItemEntry
 {
-    [field: SerializeField] public HoldableItemSO HoldableItemSO { get; private set; }
+    [field: SerializeField] public InventoryItemSO HoldableItemSO { get; private set; }
     [field: SerializeField] public GameObject HoldableObjectGO { get; private set; }
 }
 
@@ -14,8 +14,9 @@ public class HoldableProvider : NetworkBehaviour
 {
     [SerializeField] private List<HoldableItemEntry> holdableItemEntries = new();
 
+    [field: SerializeField] public InventoryItemSO CurrentHoldableItemSO { get; private set; }
 
-    private Dictionary<HoldableItemSO, GameObject> soToHoldableObjectDict;
+    private Dictionary<InventoryItemSO, GameObject> soToHoldableObjectDict;
 
     private void OnEnable()
     {
@@ -29,7 +30,7 @@ public class HoldableProvider : NetworkBehaviour
 
         if (soToHoldableObjectDict != null) return;
 
-        soToHoldableObjectDict = new Dictionary<HoldableItemSO, GameObject>();
+        soToHoldableObjectDict = new Dictionary<InventoryItemSO, GameObject>();
 
         foreach (var entry in holdableItemEntries)
         {
@@ -47,7 +48,7 @@ public class HoldableProvider : NetworkBehaviour
             }
         }
     }
-    public GameObject GetInventoryItemBySO(HoldableItemSO so)
+    public GameObject GetInventoryItemBySO(InventoryItemSO so)
     {
         // Safety: Ensure dict is initialized if Get is called before OnEnable (rare but possible)
         if (soToHoldableObjectDict == null) InitializeDictionary();
@@ -56,13 +57,13 @@ public class HoldableProvider : NetworkBehaviour
         return soToHoldableObjectDict.TryGetValue(so, out var item) ? item : null;
     }
 
-    public HoldableItemSO GetInventoryItemSOByID(string id)
+    public InventoryItemSO GetInventoryItemSOByID(string id)
     {
         if (soToHoldableObjectDict == null) InitializeDictionary();
 
         // Optimization note: Looping through keys is O(n). 
         // If this list is huge, consider a second dictionary for name lookups.
-        foreach (HoldableItemSO item in soToHoldableObjectDict.Keys)
+        foreach (InventoryItemSO item in soToHoldableObjectDict.Keys)
         {
             // Assuming InventoryItemSO has a "Name" property. 
             // If it's the asset name, use item.name
@@ -75,9 +76,15 @@ public class HoldableProvider : NetworkBehaviour
     {
         foreach (var entry in soToHoldableObjectDict)
         {
-            HoldableItemSO item = entry.Key;
+            InventoryItemSO item = entry.Key;
             GameObject holdableObject = entry.Value;
-            holdableObject.SetActive(item.ID == holdableId);
+            var isEqual = item.ID == holdableId;
+            holdableObject.SetActive(isEqual);
+
+            if(isEqual)
+            {
+                CurrentHoldableItemSO = GetInventoryItemSOByID(holdableId);
+            }
         }
     }
 
