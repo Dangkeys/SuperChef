@@ -20,12 +20,12 @@ public class ChoppingHandler : NetworkBehaviour
         this.cookingRecipeProviderSO = cookingRecipeProviderSO;
         this.netcodeHelper = netcodeHelper;
         this.inventoryHelper = inventoryHelper;
+
     }
-    void Awake()
+    void Start()
     {
         SetupRecipeIngredient();
     }
-
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void RequestToCutServerRpc()
@@ -35,7 +35,7 @@ public class ChoppingHandler : NetworkBehaviour
         {
             return;
         }
-        
+
         CurrentCount.Value++;
         if (CurrentCount.Value >= CurrentRecipeSO.ChopCount)
         {

@@ -19,7 +19,7 @@ MonoBehaviour:
   <OutputIngredient>k__BackingField:
   - <FoodItemSO>k__BackingField: {fileID: 11400000, guid: a04a4747e02dff645a8eecf72422d909, type: 2}
     <Amount>k__BackingField: 2
-  - <FoodItemSO>k__BackingField: {fileID: 11400000, guid: bdeb99399c04c9a4086c54fe3d3a6d96, type: 2}
+  - <FoodItemSO>k__BackingField: {fileID: 11400000, guid: f1db3c52e47943b4ba726f8e1435a4db, type: 2}
     <Amount>k__BackingField: 1
   <Type>k__BackingField: 1
   <ChopCount>k__BackingField: 5

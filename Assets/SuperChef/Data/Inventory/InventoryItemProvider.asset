@@ -27,3 +27,5 @@ MonoBehaviour:
     <Item>k__BackingField: {fileID: -8293308145382676582, guid: 0a7b7b2bc2a5cb14eb335b61f44f6b31, type: 3}
   - <ItemSO>k__BackingField: {fileID: 11400000, guid: a04a4747e02dff645a8eecf72422d909, type: 2}
     <Item>k__BackingField: {fileID: -6933084847928694168, guid: 621f7a01793fa764b9fd46abc403fbf9, type: 3}
+  - <ItemSO>k__BackingField: {fileID: 11400000, guid: f1db3c52e47943b4ba726f8e1435a4db, type: 2}
+    <Item>k__BackingField: {fileID: -487553256113574440, guid: 35e7b4805a0aa774189d9d171a9c7c61, type: 3}
