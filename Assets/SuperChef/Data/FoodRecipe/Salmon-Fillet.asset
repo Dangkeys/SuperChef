@@ -15,10 +15,12 @@ MonoBehaviour:
   <ID>k__BackingField: e2c64738-2cd3-40ee-8387-5270c130e1ca
   <InputIngredientList>k__BackingField:
   - <FoodItemSO>k__BackingField: {fileID: 11400000, guid: 93ce155d0d21b2540b0b4d407e45c9f9, type: 2}
-    <Amount>k__BackingField: 0
+    <Amount>k__BackingField: 1
   <OutputIngredient>k__BackingField:
   - <FoodItemSO>k__BackingField: {fileID: 11400000, guid: a04a4747e02dff645a8eecf72422d909, type: 2}
-    <Amount>k__BackingField: 0
+    <Amount>k__BackingField: 2
+  - <FoodItemSO>k__BackingField: {fileID: 11400000, guid: bdeb99399c04c9a4086c54fe3d3a6d96, type: 2}
+    <Amount>k__BackingField: 1
   <Type>k__BackingField: 1
   <ChopCount>k__BackingField: 5
   <HeatingDuration>k__BackingField: 5

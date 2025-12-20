@@ -370,7 +370,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  holdableProvider: {fileID: 1893817599778023715}
 --- !u!114 &1893817599778023715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,6 +419,7 @@ GameObject:
   - component: {fileID: 655353007011140497}
   - component: {fileID: -5674084987685377890}
   - component: {fileID: 5842196487049141752}
+  - component: {fileID: 2326455669304519493}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -742,6 +742,8 @@ MonoBehaviour:
   inventory: {fileID: 148712991986802796}
   buildingManager: {fileID: 1623986567042216449}
   playerAnimationHandler: {fileID: 8753487010742780513}
+  holdableProvider: {fileID: 1893817599778023715}
+  cookingHandler: {fileID: 2326455669304519493}
 --- !u!114 &2391895768254482974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825,6 +827,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6c6687ed7415d4bbd91fea097fc1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerInteractionHandler
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &2326455669304519493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4046918998162714044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d699e05cc1b6d784e98b8c5b934d0d0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cooking::CookingHandler
   ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &4518293118863042569
 GameObject:

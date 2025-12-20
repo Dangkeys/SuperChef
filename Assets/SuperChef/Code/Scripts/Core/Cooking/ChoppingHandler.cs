@@ -9,15 +9,17 @@ public class ChoppingHandler : NetworkBehaviour
     public RecipeIngredient InputIngredient { get; private set; }
     private CookingRecipeProviderSO cookingRecipeProviderSO;
     private NetcodeHelper netcodeHelper;
+    private InventoryHelper inventoryHelper;
 
-    public CookingRecipeSO CurrentRecipeSO {get; private set;} 
-    public int CurrentCount { get; private set; } = 0;
+    public CookingRecipeSO CurrentRecipeSO { get; private set; }
+    public NetworkVariable<int> CurrentCount { get; private set; } = new NetworkVariable<int>(0);
 
     [Inject]
-    private void Init(CookingRecipeProviderSO cookingRecipeProviderSO, NetcodeHelper netcodeHelper)
+    private void Init(CookingRecipeProviderSO cookingRecipeProviderSO, NetcodeHelper netcodeHelper, InventoryHelper inventoryHelper)
     {
         this.cookingRecipeProviderSO = cookingRecipeProviderSO;
         this.netcodeHelper = netcodeHelper;
+        this.inventoryHelper = inventoryHelper;
     }
     void Awake()
     {
@@ -25,16 +27,34 @@ public class ChoppingHandler : NetworkBehaviour
     }
 
 
-    public void Cut()
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void RequestToCutServerRpc()
     {
-        CurrentCount++;
-        if(CurrentCount >= CurrentRecipeSO.ChopCount)
+        CurrentCount.Value++;
+        Debug.Log(CurrentCount.Value);
+        if (CurrentCount.Value >= CurrentRecipeSO.ChopCount)
         {
-            
+            SpawnOutputIngredientList();
             netcodeHelper.DespawnServerRpc(new NetworkObjectReference(NetworkObject));
         }
     }
 
+    private void SpawnOutputIngredientList()
+    {
+        foreach (RecipeIngredient recipeIngredient in CurrentRecipeSO.OutputIngredient)
+        {
+            for (int i = 0; i < recipeIngredient.Amount; i++)
+            {
+                Vector3 randomOffset = new Vector3(
+                    Random.Range(-.25f, .25f),
+                    Random.Range(-1f, 0f),
+                    Random.Range(-.25f, .25f)
+                );
+                Vector3 spawnPos = transform.position + transform.up * 1f + randomOffset;
+                inventoryHelper.RequestSpawnInventoryItemServerRpc(recipeIngredient.FoodItemSO.ID, spawnPos, Quaternion.identity);
+            }
+        }
+    }
 
     private void SetupRecipeIngredient()
     {

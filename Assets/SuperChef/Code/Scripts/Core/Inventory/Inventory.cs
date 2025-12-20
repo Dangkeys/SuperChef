@@ -23,7 +23,7 @@ public class Inventory : NetworkBehaviour
 
     private GameInputReader inputReader;
     private NetcodeHelper netcodeHelper;
-    private InventoryItemProviderSO inventoryItemProvider;
+    private InventoryHelper inventoryHelper;
     [Range(0, MAX_HOTBAR_SLOT_COUNT - 1)]
     public int SelectedInventorySlotIndex { get; private set; } = 0;
     private PickUp pickUp;
@@ -35,7 +35,6 @@ public class Inventory : NetworkBehaviour
     private void Init(GameInputReader inputReader, InventoryItemProviderSO inventoryItemProvider, PickUp pickUp, NetcodeHelper netcodeHelper)
     {
         this.inputReader = inputReader;
-        this.inventoryItemProvider = inventoryItemProvider;
         this.pickUp = pickUp;
         this.netcodeHelper = netcodeHelper;
     }
@@ -161,7 +160,8 @@ public class Inventory : NetworkBehaviour
         );
         Vector3 spawnPos = transform.position + transform.forward * 2f + randomOffset;
 
-        SpawnDroppedItemServerRpc(slot.InventoryItemSO.ID, spawnPos);
+
+        inventoryHelper.RequestSpawnInventoryItemServerRpc(slot.InventoryItemSO.ID, spawnPos, Random.rotation);
         slot.DecrementCurrentAmount();
         OnInventoryChanged?.Invoke();
     }
@@ -174,19 +174,4 @@ public class Inventory : NetworkBehaviour
 
 
 
-    [Rpc(SendTo.Server)]
-    private void SpawnDroppedItemServerRpc(string itemSOID, Vector3 spawnPosition)
-    {
-        var itemSO = inventoryItemProvider.GetInventoryItemSOByID(itemSOID);
-        if (itemSO == null) return;
-
-        var prefab = inventoryItemProvider.GetInventoryItemBySO(itemSO);
-        var spawnedItem = Instantiate(prefab, spawnPosition, Quaternion.Euler(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f)));
-
-
-        if (spawnedItem.TryGetComponent(out NetworkObject netObj))
-        {
-            netObj.Spawn();
-        }
-    }
 }

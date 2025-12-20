@@ -12,7 +12,7 @@ public class InventoryHelper : NetworkBehaviour
         this.inventoryItemProviderSO = inventoryItemProviderSO;
     }
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void RequestSpawnInventoryItemServerRpc(string inventoryItemSOID, Vector3 position, Quaternion rotation, NetworkObjectReference parentRef, bool isKinematic = false)
+    public void RequestSpawnInventoryItemServerRpc(string inventoryItemSOID, Vector3 position, Quaternion rotation, NetworkObjectReference parentRef = default, bool isKinematic = false)
     {
         SpawnObject(inventoryItemSOID, position, rotation, parentRef, isKinematic);
     }

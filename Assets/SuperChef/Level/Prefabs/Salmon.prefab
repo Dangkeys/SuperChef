@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1680398013835389599}
   - component: {fileID: 3110924184172309158}
   - component: {fileID: 1847077130670432620}
+  - component: {fileID: 3859882860189254716}
   m_Layer: 0
   m_Name: Salmon
   m_TagString: Untagged
@@ -108,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1657462377
+  GlobalObjectIdHash: 4203426574
   InScenePlacedSourceGlobalObjectIdHash: 1657462377
   DeferredDespawnTick: 0
   Ownership: 1
@@ -135,9 +136,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Cooking::FoodItem
   ShowTopMostFoldoutHeaderGroup: 1
   <InventoryItemSO>k__BackingField: {fileID: 11400000, guid: 93ce155d0d21b2540b0b4d407e45c9f9, type: 2}
-  <ActiveLayerMask>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!54 &5314540957869674131
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -249,3 +247,16 @@ MonoBehaviour:
   UseRigidBodyForMotion: 0
   AutoUpdateKinematicState: 1
   AutoSetKinematicOnDespawn: 1
+--- !u!114 &3859882860189254716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013781730304102513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 105aab207e60a8e48bd78f477e024718, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cooking::ChoppingHandler
+  ShowTopMostFoldoutHeaderGroup: 1

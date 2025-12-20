@@ -13,11 +13,12 @@ public class HoldableManager : NetworkBehaviour
     private PickUp pickUp;
     private GameObject visualizeHoldableObject;
 
-    [SerializeField] private HoldableProvider holdableProvider;
+    private HoldableProvider holdableProvider;
     [Inject]
-    private void Init(Inventory inventory, PickUp pickUp)
+    private void Init(Inventory inventory, PickUp pickUp, HoldableProvider holdableProvider)
     {
         this.inventory = inventory;
+        this.holdableProvider = holdableProvider;
         this.pickUp = pickUp;
         currentInventoryItemSO = inventory.InventorySlots[0].InventoryItemSO;
         inventory.OnSelectedSlotIndexChanged += StartVisualizeHoldable;
