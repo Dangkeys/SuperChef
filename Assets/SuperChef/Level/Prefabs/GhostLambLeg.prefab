@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3402286997658842822}
   - component: {fileID: 1772309848527845731}
   - component: {fileID: 4574660115281300905}
-  - component: {fileID: 95447108445953130}
   m_Layer: 0
   m_Name: GhostLambLeg
   m_TagString: Untagged
@@ -87,24 +86,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &95447108445953130
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2629127272418962556}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.55185413, y: 0.44653958, z: 0.7880196}
-  m_Center: {x: 0.008857831, y: 0.22326958, z: -0.044129282}

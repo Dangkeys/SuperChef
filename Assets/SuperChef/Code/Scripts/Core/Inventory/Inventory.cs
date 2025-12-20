@@ -7,34 +7,37 @@ public class Inventory : NetworkBehaviour
     private const int MAX_SLOT_COUNT = 20;
     public const int MAX_HOTBAR_SLOT_COUNT = 4;
 
-    public InventorySlot[] InventorySlots { get; private set; } = new InventorySlot[MAX_SLOT_COUNT];
+    public InventorySlot[] InventorySlots { get; private set; } = CreateInventorySlots();
+    private static InventorySlot[] CreateInventorySlots()
+    {
+        var slots = new InventorySlot[MAX_SLOT_COUNT];
+        for (int i = 0; i < MAX_SLOT_COUNT; i++)
+        {
+            slots[i] = new InventorySlot();
+        }
+        return slots;
+    }
 
     [SerializeField]
     private float maxPickupDistance = 10f;
 
     private GameInputReader inputReader;
-    private InventoryItemProvider inventoryItemProvider;
+    private NetcodeHelper netcodeHelper;
+    private InventoryItemProviderSO inventoryItemProvider;
     [Range(0, MAX_HOTBAR_SLOT_COUNT - 1)]
-    public int SelectedInventorySlotIndex { get; private set; }
+    public int SelectedInventorySlotIndex { get; private set; } = 0;
     private PickUp pickUp;
     public System.Action OnSelectedSlotIndexChanged;
     public System.Action OnInventoryChanged;
 
-    private void Awake()
-    {
-        for (int i = 0; i < MAX_SLOT_COUNT; i++)
-        {
-            InventorySlots[i] = new InventorySlot();
-        }
-        SelectedInventorySlotIndex = 0;
-    }
 
     [Inject]
-    private void Init(GameInputReader inputReader, InventoryItemProvider inventoryItemProvider, PickUp pickUp)
+    private void Init(GameInputReader inputReader, InventoryItemProviderSO inventoryItemProvider, PickUp pickUp, NetcodeHelper netcodeHelper)
     {
         this.inputReader = inputReader;
         this.inventoryItemProvider = inventoryItemProvider;
         this.pickUp = pickUp;
+        this.netcodeHelper = netcodeHelper;
     }
 
 
@@ -42,7 +45,6 @@ public class Inventory : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
-        inputReader.InteractEvent += HandleInteract;
         inputReader.NextEvent += NextSelectedSlot;
         inputReader.PreviousEvent += PreviousSelectedSlot;
         inputReader.SlotChangedEvent += ChangeSelectedSlot;
@@ -57,7 +59,6 @@ public class Inventory : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         if (!IsOwner) return;
-        inputReader.InteractEvent -= HandleInteract;
         inputReader.NextEvent -= NextSelectedSlot;
         inputReader.PreviousEvent -= PreviousSelectedSlot;
         inputReader.SlotChangedEvent -= ChangeSelectedSlot;
@@ -72,12 +73,15 @@ public class Inventory : NetworkBehaviour
     {
         SelectedInventorySlotIndex--;
         if (SelectedInventorySlotIndex < 0)
+        {
             SelectedInventorySlotIndex = MAX_HOTBAR_SLOT_COUNT - 1;
+        }
         OnSelectedSlotIndexChanged?.Invoke();
     }
 
-    private void HandleInteract()
+    public void PerformInteraction()
     {
+        if (pickUp.CurrentPickableObject != null) return;
         if (!Camera.main) return;
 
         var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -85,7 +89,6 @@ public class Inventory : NetworkBehaviour
         if (!Physics.Raycast(ray, out var hit, maxPickupDistance)) return;
         if (!hit.collider.TryGetComponent(out InventoryItem inventoryItem)) return;
         if (!inventoryItem.TryGetComponent(out NetworkObject networkObject)) return;
-        if (inventoryItem.GetComponentInParent<Parentable>() != null) return; // this need to be remove later it should check for the layermask instead
 
         var networkRef = new NetworkObjectReference(networkObject);
         TryAddItemToInventory(inventoryItem, networkRef);
@@ -103,7 +106,7 @@ public class Inventory : NetworkBehaviour
             if (slot.CurrentAmount >= itemSO.MaximumAmount) continue;
 
             slot.IncrementCurrentAmount();
-            DespawnItemServerRpc(networkRef);
+            netcodeHelper.DespawnServerRpc(networkRef);
             OnInventoryChanged?.Invoke();
             return;
         }
@@ -115,7 +118,7 @@ public class Inventory : NetworkBehaviour
 
             slot.SetInventoryItemSO(itemSO);
             slot.SetCurrentAmount(1);
-            DespawnItemServerRpc(networkRef);
+            netcodeHelper.DespawnServerRpc(networkRef);
             OnInventoryChanged?.Invoke();
             return;
         }
@@ -157,7 +160,8 @@ public class Inventory : NetworkBehaviour
             Random.Range(-1f, 1f)
         );
         Vector3 spawnPos = transform.position + transform.forward * 2f + randomOffset;
-        SpawnDroppedItemServerRpc(slot.InventoryItemSO.Name, spawnPos);
+
+        SpawnDroppedItemServerRpc(slot.InventoryItemSO.ID, spawnPos);
         slot.DecrementCurrentAmount();
         OnInventoryChanged?.Invoke();
     }
@@ -169,24 +173,16 @@ public class Inventory : NetworkBehaviour
     }
 
 
-    [ServerRpc]
-    private void DespawnItemServerRpc(NetworkObjectReference objRef)
-    {
-        if (!objRef.TryGet(out NetworkObject netObj)) return;
-        if (netObj != null && netObj.IsSpawned)
-        {
-            netObj.Despawn(true);
-        }
-    }
 
-    [ServerRpc]
-    private void SpawnDroppedItemServerRpc(string itemSOName, Vector3 spawnPosition)
+    [Rpc(SendTo.Server)]
+    private void SpawnDroppedItemServerRpc(string itemSOID, Vector3 spawnPosition)
     {
-        var itemSO = inventoryItemProvider.GetInventoryItemSOByName(itemSOName);
+        var itemSO = inventoryItemProvider.GetInventoryItemSOByID(itemSOID);
         if (itemSO == null) return;
 
         var prefab = inventoryItemProvider.GetInventoryItemBySO(itemSO);
-        var spawnedItem = Instantiate(prefab, spawnPosition, Quaternion.identity);
+        var spawnedItem = Instantiate(prefab, spawnPosition, Quaternion.Euler(Random.Range(0f, 360f), Random.Range(0f, 360f), Random.Range(0f, 360f)));
+
 
         if (spawnedItem.TryGetComponent(out NetworkObject netObj))
         {

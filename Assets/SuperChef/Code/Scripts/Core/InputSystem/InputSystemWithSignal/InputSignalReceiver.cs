@@ -1,24 +1,22 @@
-using System;
-using Unity.XR.OpenVR;
-using UnityEngine;
-using UnityEngine.InputSystem;
+using System.Collections.Generic;
 using Zenject;
 
 public class InputSignalReceiver
 {
+    public Stack<InputActions> inputActionsStack = new Stack<InputActions>();
     public InputActions InputActions { get; private set; }
     private GameInputReader inputReader;
     private SignalBus signalBus;
 
     [Inject]
-    private void Init(InputActions inputActions,SignalBus signalBus, GameInputReader gameInputReader)
+    private void Init(InputActions inputActions, SignalBus signalBus, GameInputReader gameInputReader)
     {
         inputReader = gameInputReader;
         InputActions = inputActions;
         this.signalBus = signalBus;
         if (signalBus == null) return;
-        signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
-        signalBus.Subscribe<UIOpenSignal>(OnUIOpened);
+        this.signalBus.Subscribe<PlayerSpawnedSignal>(OnPlayerSpawned);
+        this.signalBus.Subscribe<UIOpenSignal>(OnUIOpened);
     }
 
     private void OnUIOpened(UIOpenSignal signal)
