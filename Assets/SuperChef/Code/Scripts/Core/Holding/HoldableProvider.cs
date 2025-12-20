@@ -14,7 +14,7 @@ public class HoldableProvider : NetworkBehaviour
 {
     [SerializeField] private List<HoldableItemEntry> holdableItemEntries = new();
 
-    [field: SerializeField] public InventoryItemSO CurrentHoldableItemSO { get; private set; }
+    public InventoryItemSO CurrentHoldableItemSO { get; private set; }
 
     private Dictionary<InventoryItemSO, GameObject> soToHoldableObjectDict;
 
@@ -25,7 +25,7 @@ public class HoldableProvider : NetworkBehaviour
 
     private void InitializeDictionary()
     {
-        // Safety check: ensure the list isn't null
+
         if (holdableItemEntries == null) return;
 
         if (soToHoldableObjectDict != null) return;
@@ -36,12 +36,9 @@ public class HoldableProvider : NetworkBehaviour
         {
             if (entry.HoldableItemSO == null || entry.HoldableObjectGO == null)
             {
-                // Changed 'this' context slightly; Debug works fine, but clicking it 
-                // highlights the SO asset in the project window now.
                 Debug.LogWarning("HoldableItemEntry has missing HoldableItemSO or HoldableObjectGO reference!", this);
                 continue;
             }
-            // Use TryAdd or check key existence to prevent duplicate key errors
             if (!soToHoldableObjectDict.ContainsKey(entry.HoldableItemSO))
             {
                 soToHoldableObjectDict.Add(entry.HoldableItemSO, entry.HoldableObjectGO);
@@ -50,7 +47,6 @@ public class HoldableProvider : NetworkBehaviour
     }
     public GameObject GetInventoryItemBySO(InventoryItemSO so)
     {
-        // Safety: Ensure dict is initialized if Get is called before OnEnable (rare but possible)
         if (soToHoldableObjectDict == null) InitializeDictionary();
 
         if (so == null) return null;
@@ -61,12 +57,8 @@ public class HoldableProvider : NetworkBehaviour
     {
         if (soToHoldableObjectDict == null) InitializeDictionary();
 
-        // Optimization note: Looping through keys is O(n). 
-        // If this list is huge, consider a second dictionary for name lookups.
         foreach (InventoryItemSO item in soToHoldableObjectDict.Keys)
         {
-            // Assuming InventoryItemSO has a "Name" property. 
-            // If it's the asset name, use item.name
             if (item.ID == id)
                 return item;
         }
@@ -74,27 +66,28 @@ public class HoldableProvider : NetworkBehaviour
     }
     public void VisualizeHoldableItem(string holdableId)
     {
-        foreach (var entry in soToHoldableObjectDict)
+        CurrentHoldableItemSO = null;
+        
+        foreach (KeyValuePair<InventoryItemSO, GameObject> entry in soToHoldableObjectDict)
         {
-            InventoryItemSO item = entry.Key;
-            GameObject holdableObject = entry.Value;
-            var isEqual = item.ID == holdableId;
-            holdableObject.SetActive(isEqual);
+            bool isEqual = entry.Key.ID == holdableId;
+            entry.Value.SetActive(isEqual);
 
-            if(isEqual)
+            if (isEqual)
             {
-                CurrentHoldableItemSO = GetInventoryItemSOByID(holdableId);
+            CurrentHoldableItemSO = entry.Key;
             }
         }
     }
 
-    [ServerRpc]
+
+    [Rpc(SendTo.Server)]
     public void RequestToSetActiveHoldableServerRpc(string holdableID)
     {
-        NotifyToSetActiveHoldableClientRpc(holdableID);
+        NotifyToSetHoldableActiveClientRpc(holdableID);
     }
-    [ClientRpc]
-    private void NotifyToSetActiveHoldableClientRpc(string holdableID)
+    [Rpc(SendTo.ClientsAndHost)]
+    private void NotifyToSetHoldableActiveClientRpc(string holdableID)
     {
         VisualizeHoldableItem(holdableID);
     }

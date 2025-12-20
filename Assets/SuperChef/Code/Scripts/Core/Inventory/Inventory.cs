@@ -7,34 +7,37 @@ public class Inventory : NetworkBehaviour
     private const int MAX_SLOT_COUNT = 20;
     public const int MAX_HOTBAR_SLOT_COUNT = 4;
 
-    public InventorySlot[] InventorySlots { get; private set; } = new InventorySlot[MAX_SLOT_COUNT];
+    public InventorySlot[] InventorySlots { get; private set; } = CreateInventorySlots();
+    private static InventorySlot[] CreateInventorySlots()
+    {
+        var slots = new InventorySlot[MAX_SLOT_COUNT];
+        for (int i = 0; i < MAX_SLOT_COUNT; i++)
+        {
+            slots[i] = new InventorySlot();
+        }
+        return slots;
+    }
 
     [SerializeField]
     private float maxPickupDistance = 10f;
 
     private GameInputReader inputReader;
+    private NetcodeHelper netcodeHelper;
     private InventoryItemProviderSO inventoryItemProvider;
     [Range(0, MAX_HOTBAR_SLOT_COUNT - 1)]
-    public int SelectedInventorySlotIndex { get; private set; }
+    public int SelectedInventorySlotIndex { get; private set; } = 0;
     private PickUp pickUp;
     public System.Action OnSelectedSlotIndexChanged;
     public System.Action OnInventoryChanged;
 
-    private void Awake()
-    {
-        for (int i = 0; i < MAX_SLOT_COUNT; i++)
-        {
-            InventorySlots[i] = new InventorySlot();
-        }
-        SelectedInventorySlotIndex = 0;
-    }
 
     [Inject]
-    private void Init(GameInputReader inputReader, InventoryItemProviderSO inventoryItemProvider, PickUp pickUp)
+    private void Init(GameInputReader inputReader, InventoryItemProviderSO inventoryItemProvider, PickUp pickUp, NetcodeHelper netcodeHelper)
     {
         this.inputReader = inputReader;
         this.inventoryItemProvider = inventoryItemProvider;
         this.pickUp = pickUp;
+        this.netcodeHelper = netcodeHelper;
     }
 
 
@@ -70,7 +73,9 @@ public class Inventory : NetworkBehaviour
     {
         SelectedInventorySlotIndex--;
         if (SelectedInventorySlotIndex < 0)
+        {
             SelectedInventorySlotIndex = MAX_HOTBAR_SLOT_COUNT - 1;
+        }
         OnSelectedSlotIndexChanged?.Invoke();
     }
 
@@ -101,7 +106,7 @@ public class Inventory : NetworkBehaviour
             if (slot.CurrentAmount >= itemSO.MaximumAmount) continue;
 
             slot.IncrementCurrentAmount();
-            DespawnItemServerRpc(networkRef);
+            netcodeHelper.DespawnServerRpc(networkRef);
             OnInventoryChanged?.Invoke();
             return;
         }
@@ -113,7 +118,7 @@ public class Inventory : NetworkBehaviour
 
             slot.SetInventoryItemSO(itemSO);
             slot.SetCurrentAmount(1);
-            DespawnItemServerRpc(networkRef);
+            netcodeHelper.DespawnServerRpc(networkRef);
             OnInventoryChanged?.Invoke();
             return;
         }
@@ -168,17 +173,8 @@ public class Inventory : NetworkBehaviour
     }
 
 
-    [ServerRpc]
-    private void DespawnItemServerRpc(NetworkObjectReference objRef)
-    {
-        if (!objRef.TryGet(out NetworkObject netObj)) return;
-        if (netObj != null && netObj.IsSpawned)
-        {
-            netObj.Despawn(true);
-        }
-    }
 
-    [ServerRpc]
+    [Rpc(SendTo.Server)]
     private void SpawnDroppedItemServerRpc(string itemSOID, Vector3 spawnPosition)
     {
         var itemSO = inventoryItemProvider.GetInventoryItemSOByID(itemSOID);

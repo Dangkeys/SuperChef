@@ -9,8 +9,8 @@ public class PlayerAnimationHandler : NetworkBehaviour
     private int attackParamID;
     private const string ATTACK_STRING = "Attack";
     private GameInputReader inputReader;
+    private PickUp pickUp;
     [SerializeField] private HoldableProvider holdableProvider;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -18,29 +18,18 @@ public class PlayerAnimationHandler : NetworkBehaviour
     }
 
     [Inject]
-    private void Init(GameInputReader inputReader)
+    private void Init(GameInputReader inputReader, PickUp pickUp)
     {
         this.inputReader = inputReader;
-
+        this.pickUp = pickUp;
     }
 
-    public override void OnNetworkSpawn()
+    public void TriggerAttackAnimation()
     {
-       if (!IsOwner) return;
-         inputReader.AttackEvent += TriggerAttackAnimation;
-    }
-    private void TriggerAttackAnimation()
-    {
-        if(holdableProvider.CurrentHoldableItemSO == null) return;
+        if (holdableProvider.CurrentHoldableItemSO == null || pickUp.CurrentPickableObject != null) return;
 
         animator.SetTrigger(attackParamID);
     }
 
-
-    public override void OnNetworkDespawn()
-    {
-       if (!IsOwner) return;
-        inputReader.AttackEvent -= TriggerAttackAnimation;
-    }
 
 }

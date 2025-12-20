@@ -60,18 +60,19 @@ public class PickUp : NetworkBehaviour
         return false;
     }
 
-    [ServerRpc]
+    [Rpc(SendTo.Server)]
     private void RequestPickUpServerRpc(NetworkObjectReference pickableRef)
     {
 
         if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickableObject))
         {
             netObj.TrySetParent(transform, true);
+            pickableObject.SetIsKinematic(true);
             pickableObject.NotifyObjectPickedClientRpc();
             NotifySetCurrentPickableChangedClientRpc(pickableRef);
         }
     }
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void NotifySetCurrentPickableChangedClientRpc(NetworkObjectReference pickableRef)
     {
         if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickableObject))
@@ -83,7 +84,7 @@ public class PickUp : NetworkBehaviour
             OnCurrentPickableObjectChanged?.Invoke();
         }
     }
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     private void NotifySetCurrentPickableToNullClientRpc()
     {
         CurrentPickableObject = null;
@@ -101,12 +102,13 @@ public class PickUp : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
+    [Rpc(SendTo.Server)]
     private void RequestDropServerRpc(NetworkObjectReference pickableRef)
     {
         if (pickableRef.TryGet(out var netObj) && netObj.TryGetComponent(out PickableObject pickableObject))
         {
             netObj.TryRemoveParent();
+            pickableObject.SetIsKinematic(false);
             pickableObject.NotifyObjectDroppedClientRpc();
             NotifySetCurrentPickableToNullClientRpc();
         }

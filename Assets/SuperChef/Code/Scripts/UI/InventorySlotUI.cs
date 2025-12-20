@@ -102,9 +102,6 @@ public class InventorySlotUI : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             inventory.SwapInventorySlot(InventorySlot, draggedSlot);
         }
 
-        Debug.Log($"Inventory: {inventory}");
-        Debug.Log($"Target InventorySlot: {InventorySlot}");
-        Debug.Log($"Dragged InventorySlot: {draggedSlot}");
     }
 
 

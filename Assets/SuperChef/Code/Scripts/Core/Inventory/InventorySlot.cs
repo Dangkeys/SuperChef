@@ -4,10 +4,9 @@ using System;
 public class InventorySlot
 {
     public event Action OnSlotChanged;
-    
+
     public InventoryItemSO InventoryItemSO { get; private set; }
     public int CurrentAmount { get; private set; }
-
     public void SetInventoryItemSO(InventoryItemSO inventoryItemSO)
     {
         InventoryItemSO = inventoryItemSO;

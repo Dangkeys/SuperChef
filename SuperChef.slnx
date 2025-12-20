@@ -7,6 +7,7 @@
   <Project Path="QFSW.QC.csproj" />
   <Project Path="Zenject-UnitTests-Editor.csproj" />
   <Project Path="QFSW.QC.Grammar.csproj" />
+  <Project Path="Inventory.csproj" />
   <Project Path="Zenject-Editor.csproj" />
   <Project Path="Zenject-IntegrationTests.csproj" />
   <Project Path="QFSW.QC.Editor.csproj" />
@@ -21,13 +22,12 @@
   <Project Path="QFSW.QC.Serializers.csproj" />
   <Project Path="QFSW.QC.UI.csproj" />
   <Project Path="Zenject-PoolMonitor-Editor.csproj" />
-  <Project Path="Inventory.csproj" />
   <Project Path="BetterHierarchy.csproj" />
   <Project Path="QFSW.QC.Demo.csproj" />
   <Project Path="Cooking.csproj" />
   <Project Path="QFSW.QC.Editor.Tools.csproj" />
-  <Project Path="AssetInventory.JD.EditorAudioUtils.Editor.csproj" />
   <Project Path="Utils.csproj" />
+  <Project Path="AssetInventory.JD.EditorAudioUtils.Editor.csproj" />
   <Project Path="Sirenix.OdinInspector.Modules.UnityMathematics.csproj" />
   <Project Path="UI.csproj" />
   <Project Path="QFSW.QC.ScanRules.csproj" />

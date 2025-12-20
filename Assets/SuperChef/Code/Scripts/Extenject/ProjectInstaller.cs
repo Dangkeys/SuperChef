@@ -7,6 +7,7 @@ using Zenject;
 public class ProjectInstaller : MonoInstaller
 {
     [SerializeField] private SettingsHandler settingsHandler;
+
     public override void InstallBindings()
     {
         // Example: services that should auto-run

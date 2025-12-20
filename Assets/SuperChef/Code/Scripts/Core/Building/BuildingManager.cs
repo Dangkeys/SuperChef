@@ -16,20 +16,20 @@ public class BuildingManager : NetworkBehaviour
     private Parentable latestParentable = null;
     private bool canPlaceHere;
     private Inventory inventory;
+    private InventoryHelper inventoryHelper;
 
     private InventoryItemProviderSO inventoryItemProviderSO;
     [Inject]
-    private void Init(GameInputReader inputReader, Inventory inventory, InventoryItemProviderSO inventoryItemProviderSO)
+    private void Init(GameInputReader inputReader, Inventory inventory, InventoryItemProviderSO inventoryItemProviderSO, InventoryHelper inventoryHelper)
     {
         this.inputReader = inputReader;
         this.inventory = inventory;
         this.inventoryItemProviderSO = inventoryItemProviderSO;
+        this.inventoryHelper = inventoryHelper;
     }
-
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) return;
-        inputReader.AttackEvent += OnTryBuildObject;
         inventory.OnSelectedSlotIndexChanged += ChangeCurrentBuildable;
         inventory.OnInventoryChanged += InventoryChanged;
         currentBuildableObjectSO = inventory.InventorySlots[0].InventoryItemSO as BuildableObjectSO;
@@ -48,8 +48,6 @@ public class BuildingManager : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-        if (inputReader != null)
-            inputReader.AttackEvent -= OnTryBuildObject;
         if (inventory != null)
         {
             inventory.OnSelectedSlotIndexChanged -= ChangeCurrentBuildable;
@@ -89,7 +87,7 @@ public class BuildingManager : NetworkBehaviour
     private void VisualizeBuildableObject()
     {
         if (visualizeBuildableObject == null) return;
-        int placementLayerMask = currentBuildableObjectSO.BuildableObject.ActiveLayerMask.value;
+        int placementLayerMask = currentBuildableObjectSO.ActiveLayerMask.value;
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         if (Physics.Raycast(ray, out RaycastHit hit, maxPlaceObjectDistance, placementLayerMask))
         {
@@ -157,59 +155,27 @@ public class BuildingManager : NetworkBehaviour
 
 
 
-    private void OnTryBuildObject()
+    public bool OnTryBuildObject()
     {
         if (!canPlaceHere || currentBuildableObjectSO == null)
-            return;
+            return false;
 
-        Vector3 placePos = visualizeBuildableObject.transform.position;
-        Quaternion placeRot = visualizeBuildableObject.transform.rotation;
-        string buildableObjectSOID = currentBuildableObjectSO.ID;
-        if (IsServer)
-        {
-            SpawnObject(buildableObjectSOID, placePos, placeRot);
-        }
-        else
-        {
-            NetworkObjectReference parentRef = default;
-            if (latestParentable != null && latestParentable.TryGetComponent(out NetworkObject parentNetObj))
-            {
-                parentRef = parentNetObj;
-            }
+        visualizeBuildableObject.transform.GetPositionAndRotation(out var placePos, out var placeRot);
+        var buildableObjectSOID = currentBuildableObjectSO.ID;
 
-            RequestSpawnServerRpc(buildableObjectSOID, placePos, placeRot, parentRef);
+        NetworkObjectReference parentRef = default;
+        if (latestParentable != null && latestParentable.TryGetComponent(out NetworkObject parentNetObj))
+        {
+            parentRef = parentNetObj;
         }
+
+        inventoryHelper.RequestSpawnInventoryItemServerRpc(buildableObjectSOID, placePos, placeRot, parentRef, true);
 
         inventory.DecrementSelectedSlot();
         StartVisualizeBuildableObject();
+        return true;
     }
 
-    [ServerRpc]
-    private void RequestSpawnServerRpc(string buildableObjectSOID, Vector3 position, Quaternion rotation, NetworkObjectReference parentRef)
-    {
-        SpawnObject(buildableObjectSOID, position, rotation, parentRef);
-    }
 
-    private void SpawnObject(string buildableObjectSOID, Vector3 position, Quaternion rotation, NetworkObjectReference parentRef = default)
-    {
-        BuildableObjectSO buildableObjectSO = inventoryItemProviderSO.GetInventoryItemSOByID(buildableObjectSOID) as BuildableObjectSO;
-        if (buildableObjectSO == null) return;
-        var newObj = Instantiate(buildableObjectSO.BuildableObject, position, rotation);
-        newObj.NetworkObject.Spawn(true);
-
-        if (parentRef.TryGet(out NetworkObject parentNetworkObject))
-        {
-            newObj.NetworkObject.TrySetParent(parentNetworkObject.transform);
-        }
-        else if (latestParentable != null)
-        {
-            newObj.NetworkObject.TrySetParent(latestParentable.transform);
-        }
-
-        if (newObj.TryGetComponent(out BuildableObject buildableObject))
-        {
-            buildableObject.NotifyBuildingObjectPlacedClientRpc();
-        }
-    }
 
 }

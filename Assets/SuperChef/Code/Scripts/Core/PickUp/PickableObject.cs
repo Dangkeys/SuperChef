@@ -1,7 +1,8 @@
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(NetworkObject))]
+[RequireComponent(typeof(NetworkRigidbody), typeof(NetworkObject))]
 public class PickableObject : NetworkBehaviour
 {
     private Rigidbody rb;
@@ -9,19 +10,20 @@ public class PickableObject : NetworkBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>(); 
+        col = GetComponent<Collider>();
     }
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void NotifyObjectPickedClientRpc()
     {
-        rb.isKinematic = true;
         col.enabled = false;
     }
-    [ClientRpc]
+    [Rpc(SendTo.ClientsAndHost)]
     public void NotifyObjectDroppedClientRpc()
     {
-        rb.isKinematic = false;
         col.enabled = true;
     }
-
+    public void SetIsKinematic(bool isKinematic)
+    {
+        rb.isKinematic = isKinematic;
+    }
 }
