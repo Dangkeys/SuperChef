@@ -23,8 +23,8 @@ public class CookingManager : NetworkBehaviour
 
         if (!Physics.Raycast(ray, out var hit, maxInteractDistance)) return;
         if (!hit.collider.TryGetComponent(out ChoppingHandler choppingHandler)) return;
-        if(holdableProvider.CurrentHoldableItemSO.Name != "Knife") return; //for quick test TODO: fix this later
-        choppingHandler.RequestToCutServerRpc();
+        if (holdableProvider.CurrentHoldableItemSO == null) return;
+        if (holdableProvider.CurrentHoldableItemSO.Name != "Knife") return; // TODO: Replace with proper type checking (e.g., ItemType enum or interface)        choppingHandler.RequestToCutServerRpc();
     }
 
 

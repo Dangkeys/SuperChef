@@ -30,15 +30,19 @@ public class ChoppingHandler : NetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void RequestToCutServerRpc()
     {
+        // Prevent race conditions by checking if already complete
+        if (CurrentCount.Value >= CurrentRecipeSO.ChopCount)
+        {
+            return;
+        }
+        
         CurrentCount.Value++;
-        Debug.Log(CurrentCount.Value);
         if (CurrentCount.Value >= CurrentRecipeSO.ChopCount)
         {
             SpawnOutputIngredientList();
             netcodeHelper.DespawnServerRpc(new NetworkObjectReference(NetworkObject));
         }
     }
-
     private void SpawnOutputIngredientList()
     {
         foreach (RecipeIngredient recipeIngredient in CurrentRecipeSO.OutputIngredient)

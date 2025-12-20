@@ -26,11 +26,12 @@ public class HoldableManager : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) return;
+        if (!IsOwner || pickUp == null) return;
         pickUp.OnCurrentPickableObjectChanged += StartVisualizeHoldable;
     }
     public override void OnNetworkDespawn()
     {
+        if (inventory == null) return;
         inventory.OnSelectedSlotIndexChanged -= StartVisualizeHoldable;
         inventory.OnInventoryChanged -= StartVisualizeHoldable;
         if (!IsOwner) return;
