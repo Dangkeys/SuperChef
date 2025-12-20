@@ -11,6 +11,7 @@ Position: $FNH7jswVnxHg2azK3tLewb:1
 
 # <BuildableObject>k__BackingField
 Position: $CUwjQRi1y8jpvQvKVUN56w:4
-+ [Sirenix.OdinInspector.PreviewFieldAttribute]
-	Height = 84.78
 + [Sirenix.OdinInspector.AssetsOnlyAttribute]
+
+# <ActiveLayerMask>k__BackingField
+Position: $CUwjQRi1y8jpvQvKVUN56w:4

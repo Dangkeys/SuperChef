@@ -17,5 +17,7 @@ MonoBehaviour:
   <Description>k__BackingField: SalmonFillet
   <ItemSprite>k__BackingField: {fileID: 21300196, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
   <MaximumAmount>k__BackingField: 4
-  <BuildableObject>k__BackingField: {fileID: -6933084847928694168, guid: 621f7a01793fa764b9fd46abc403fbf9, type: 3}
+  <ActiveLayerMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 768
   <BuildableObjectGhostPrefab>k__BackingField: {fileID: 2444718326686594179, guid: f9f56569ea4a6ee4b8b09dfb0323ea99, type: 3}

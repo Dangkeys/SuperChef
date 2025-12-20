@@ -17,5 +17,7 @@ MonoBehaviour:
   <Description>k__BackingField: LambLeg
   <ItemSprite>k__BackingField: {fileID: 21300192, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
   <MaximumAmount>k__BackingField: 1
-  <BuildableObject>k__BackingField: {fileID: -500244039734025076, guid: 8dc465f46b6c8b242be3b0a23bd18bf1, type: 3}
+  <ActiveLayerMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 768
   <BuildableObjectGhostPrefab>k__BackingField: {fileID: 2629127272418962556, guid: 493d169d854017c4e99ca196b03832e3, type: 3}

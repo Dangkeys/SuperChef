@@ -17,5 +17,7 @@ MonoBehaviour:
   <Description>k__BackingField: Box
   <ItemSprite>k__BackingField: {fileID: 21300190, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
   <MaximumAmount>k__BackingField: 2
-  <BuildableObject>k__BackingField: {fileID: -1097027851755111974, guid: bd4c726b4f01cb6478814d14fbdec261, type: 3}
+  <ActiveLayerMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 128
   <BuildableObjectGhostPrefab>k__BackingField: {fileID: 7671005898297567466, guid: 4d57ab3bbf4e96d4694dc351291998d4, type: 3}

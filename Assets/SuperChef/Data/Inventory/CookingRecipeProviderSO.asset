@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: CookingRecipeProviderSO
   m_EditorClassIdentifier: Cooking::CookingRecipeProviderSO
   <CookingRecipeSOList>k__BackingField:
-  - {fileID: 11400000, guid: d0a148389eef0a240acacbdc0f35b8dd, type: 2}
+  - {fileID: 11400000, guid: 4b63698b1620b6c42add75aa3f3656a3, type: 2}

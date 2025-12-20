@@ -1,0 +1,78 @@
+OVDF v1.1
+CookingRecipeSO, Cooking
+MetaGuid:f47560b59798a484dafafc2c9db91696
+
+# $YS4QURScYjwPgrH7SZBv67
+Position: $CeQPjA27d1i9YUozzaB7g6:0
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+
+# $DL3Xvvvm38f7k7VsefwFw1
+Position: $YS4QURScYjwPgrH7SZBv67:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $NnZoNTErBD7Jdf7on1kg8W
+Position: $DL3Xvvvm38f7k7VsefwFw1:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $E1CL6XbGf1SimYDZQUiXPH
+Position: $DL3Xvvvm38f7k7VsefwFw1:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $CeQPjA27d1i9YUozzaB7g6
+Position: $root:21
++ [Sirenix.OdinInspector.TitleGroupAttribute]
+	GroupName = "Recipes"
+
+# $BbJQfMx5Uuas8UBz9TfWnL
+Position: $7ECgUdYxNJ4nJxxsGUEjKf:0
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+
+# $7ECgUdYxNJ4nJxxsGUEjKf
+Position: $root:22
++ [Sirenix.OdinInspector.TitleGroupAttribute]
+	GroupName = "Configuration"
+
+# $RSvFgM7m9qe7htRncX9z9x
+Position: $NAe56Qv1VUJQv6fh97bJXy:0
++ [Sirenix.OdinInspector.VerticalGroupAttribute]
+
+# $JYaoYsZD7PBTvyLpS1zyuW
+Position: $BbJQfMx5Uuas8UBz9TfWnL:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $TvVXwsSaSmBMcNESVmUw11
+Position: $JYaoYsZD7PBTvyLpS1zyuW:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $NAe56Qv1VUJQv6fh97bJXy
+Position: $JYaoYsZD7PBTvyLpS1zyuW:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# <HeatingDuration>k__BackingField
+Position: $RSvFgM7m9qe7htRncX9z9x:1
++ [Sirenix.OdinInspector.ShowIfAttribute]
+	Condition = "@Type == CookingType.Heating"
+
+# <ChopCount>k__BackingField
+Position: $RSvFgM7m9qe7htRncX9z9x:3
++ [Sirenix.OdinInspector.ShowIfAttribute]
+	Condition = "@Type == CookingType.Chopping"
+
+# <GrillingDuration>k__BackingField
+Position: $RSvFgM7m9qe7htRncX9z9x:0
++ [Sirenix.OdinInspector.ShowIfAttribute]
+	Condition = "@Type == CookingType.Grilling"
+
+# <StewingDuration>k__BackingField
+Position: $RSvFgM7m9qe7htRncX9z9x:2
++ [Sirenix.OdinInspector.ShowIfAttribute]
+	Condition = "@Type == CookingType.Stewing"
+
+# <InputIngredientList>k__BackingField
+Position: $NnZoNTErBD7Jdf7on1kg8W:0
+
+# <OutputIngredient>k__BackingField
+Position: $E1CL6XbGf1SimYDZQUiXPH:0
+
+# <Type>k__BackingField
+Position: $TvVXwsSaSmBMcNESVmUw11:0

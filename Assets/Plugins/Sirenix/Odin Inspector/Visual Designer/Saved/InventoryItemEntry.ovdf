@@ -1,0 +1,73 @@
+OVDF v1.1
+InventoryItemEntry, Inventory
+
+# $DiR2PJ4QEzCAxxCZz5ZyRG
+Position: $root:8
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+
+# $GvtkZYbuak6VydrHZoZpUo
+Position: $DiR2PJ4QEzCAxxCZz5ZyRG:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $8NbyuVKdGykpFzTm542qv9
+Position: $GvtkZYbuak6VydrHZoZpUo:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $KH88qmYmfMSbEyTQ3jkUE2
+Position: $8NbyuVKdGykpFzTm542qv9:0
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+	HideWhenChildrenAreInvisible = True
+	PaddingLeft = 2.68
+	MinWidth = -1.38
+	MaxWidth = 3.36
+	Title = "Inventory Item Prefab"
+	DisableAutomaticLabelWidth = True
+
+# $2HAEZB2z7cUTHyaqstTv7j
+Position: $KH88qmYmfMSbEyTQ3jkUE2:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $DQiFLVkcETuNX7rKJQbWuM
+Position: $2HAEZB2z7cUTHyaqstTv7j:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $VyNZqTRKGsjQeApDyESHWW
+Position: $2HAEZB2z7cUTHyaqstTv7j:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $RQYwFRKcnsqrk5V6mX4VZy
+Position: $LYeatjksq2xwg7kicD4jrQ:0
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+	Title = "InventoryItemSO"
+
+# $Nj57DnbcEtQy8xTkNNixBH
+Position: $RQYwFRKcnsqrk5V6mX4VZy:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $PEsFDh8pEaxRxoQv8qU5Ts
+Position: $Nj57DnbcEtQy8xTkNNixBH:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $NHCAjPvpS4GGyhQF3Z2FqL
+Position: $Nj57DnbcEtQy8xTkNNixBH:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $LYeatjksq2xwg7kicD4jrQ
+Position: $GvtkZYbuak6VydrHZoZpUo:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# PreviewItem
+Position: $DQiFLVkcETuNX7rKJQbWuM:0
++ [Sirenix.OdinInspector.PreviewFieldAttribute]
+
+# PreviewSO
+Position: $NHCAjPvpS4GGyhQF3Z2FqL:0
++ [Sirenix.OdinInspector.PreviewFieldAttribute]
+
+# <Item>k__BackingField
+Position: $VyNZqTRKGsjQeApDyESHWW:0
++ [Sirenix.OdinInspector.HideLabelAttribute]
+
+# <ItemSO>k__BackingField
+Position: $PEsFDh8pEaxRxoQv8qU5Ts:0
++ [Sirenix.OdinInspector.HideLabelAttribute]
