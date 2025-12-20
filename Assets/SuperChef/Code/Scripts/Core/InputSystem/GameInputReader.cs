@@ -1,14 +1,17 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Zenject;
 
-public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSceneActions, InputActions.IUIActions, IDisposable
+public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSceneActions, InputActions.IUIActions, InputActions.IGlobalActions, IDisposable
 {
     public Action<Vector2> MoveEvent;
     public Action JumpEvent;
     public Action<Vector2> LookEvent;
 
+    public Action OpenSettingEvent;
     public Action AttackEvent;
 
     public Action CrouchEvent;
@@ -17,6 +20,7 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
     public Action OpenInventoryEvent;
     public Action PreviousEvent;
     public Action NextEvent;
+    public Action<int> SlotChangedEvent;
 
     public InputActions InputActions { get; private set; }
     private InputActionMap[] defaultInputActionMap;
@@ -28,8 +32,10 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
         defaultInputActionMap = new InputActionMap[] { InputActions.GameScene, InputActions.Global };
         InputActions.GameScene.SetCallbacks(this);
         InputActions.Player.SetCallbacks(this);
+        InputActions.Global.SetCallbacks(this);
         InputActions.Player.Enable();
         InputActions.GameScene.Enable();
+        InputActions.Global.Enable();
 
     }
 
@@ -46,7 +52,7 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started)
             InteractEvent?.Invoke();
     }
 
@@ -195,5 +201,19 @@ public class GameInputReader : InputActions.IPlayerActions, InputActions.IGameSc
     public void OnTrackedDeviceOrientation(InputAction.CallbackContext context)
     {
         throw new NotImplementedException();
+    }
+
+    public void OnChangeSelectedSlot(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
+
+        int slot = Mathf.RoundToInt(ctx.ReadValue<float>()) - 1;
+        SlotChangedEvent.Invoke(slot);
+    }
+
+    public void OnOpenSettings(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+            OpenSettingEvent?.Invoke();
     }
 }

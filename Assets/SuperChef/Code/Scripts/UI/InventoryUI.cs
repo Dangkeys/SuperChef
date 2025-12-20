@@ -1,5 +1,4 @@
 using System;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
 
@@ -8,7 +7,6 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Transform inventorySlotsParentTransform;
     [SerializeField] private Transform hotBarSlotsParentTransform;
     [SerializeField] private GameObject showInventoryGameObject;
-    [AssetsOnly]
     [SerializeField] private InventorySlotUI inventorySlotUIPrefab;
     private Inventory inventory;
     private GameInputReader inputReader;

@@ -1,0 +1,52 @@
+OVDF v1.1
+RecipeIngredient, Cooking
+
+# $P8mUzcCZHjqLgwkCaKySV6
+Position: $root:7
++ [Sirenix.OdinInspector.HorizontalGroupAttribute]
+	Title = "FoodItemSO"
+
+# $TdZEcFQfa6rwwv1SVQFg6e
+Position: $GD65SqR4aKLwVTztdovM1y:0
++ [Sirenix.OdinInspector.VerticalGroupAttribute]
+
+# $5LFBqESgL8z5Vy6nCb5g44
+Position: $2zwM678FS7QSwuCyQSe2xi:0
++ [Sirenix.OdinInspector.VerticalGroupAttribute]
+
+# $LGaR8iyG97oz8zmwNWewWF
+Position: $P8mUzcCZHjqLgwkCaKySV6:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $GD65SqR4aKLwVTztdovM1y
+Position: $LGaR8iyG97oz8zmwNWewWF:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $2zwM678FS7QSwuCyQSe2xi
+Position: $LGaR8iyG97oz8zmwNWewWF:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# $K6CtbNG4ospeiwo6bTckY5
+Position: $5LFBqESgL8z5Vy6nCb5g44:0
++ [Sirenix.OdinInspector.ColumnGroupAttribute]
+
+# $Hx6kbr8VeTU9SUaYCwcFt4
+Position: $K6CtbNG4ospeiwo6bTckY5:1
++ [Sirenix.OdinInspector.ColumnGroupAttribute+ColumnSubGroupAttribute]
+
+# PreviewSO
+Position: $TdZEcFQfa6rwwv1SVQFg6e:0
++ [Sirenix.OdinInspector.PreviewFieldAttribute]
+
+# <FoodItemSO>k__BackingField
+Position: $Hx6kbr8VeTU9SUaYCwcFt4:0
++ [Sirenix.OdinInspector.HideLabelAttribute]
++ [Sirenix.OdinInspector.AssetsOnlyAttribute]
+
+# <NeededAmount>k__BackingField
+Position: $5LFBqESgL8z5Vy6nCb5g44:1
++ [Sirenix.OdinInspector.LabelWidthAttribute]
+	Width = 100
+
+# <Count>k__BackingField
+Position: $Hx6kbr8VeTU9SUaYCwcFt4:1

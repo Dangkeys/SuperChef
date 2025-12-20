@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7979e85c91e8b9f46a7268a0d0db1f46, type: 3}
+  m_Name: BoxSO
+  m_EditorClassIdentifier: Building::BuildableObjectSO
+  <ID>k__BackingField: 093bf26f-4895-4a5d-a7c4-ada935497207
+  <Name>k__BackingField: Box
+  <Description>k__BackingField: Box
+  <ItemSprite>k__BackingField: {fileID: 21300190, guid: 1e627bcafe9e32d40ad554880f36b5eb, type: 3}
+  <MaximumAmount>k__BackingField: 2
+  <ActiveLayerMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 128
+  <BuildableObjectGhostPrefab>k__BackingField: {fileID: 7671005898297567466, guid: 4d57ab3bbf4e96d4694dc351291998d4, type: 3}
