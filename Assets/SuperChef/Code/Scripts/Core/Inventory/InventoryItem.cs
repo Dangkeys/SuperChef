@@ -2,7 +2,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-[RequireComponent(typeof(NetworkRigidbody))]
+[RequireComponent(typeof(NetworkRigidbody), typeof(AutoInjectOnAwake))]
 public class InventoryItem : NetworkBehaviour
 {
     [field: SerializeField] public InventoryItemSO InventoryItemSO { get; private set; }

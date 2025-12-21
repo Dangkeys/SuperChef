@@ -20,13 +20,8 @@ public class ChoppingHandler : NetworkBehaviour
         this.cookingRecipeProviderSO = cookingRecipeProviderSO;
         this.netcodeHelper = netcodeHelper;
         this.inventoryHelper = inventoryHelper;
-
-    }
-    void Start()
-    {
         SetupRecipeIngredient();
     }
-
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void RequestToCutServerRpc()
     {
