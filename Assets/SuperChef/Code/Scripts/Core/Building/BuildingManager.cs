@@ -88,8 +88,7 @@ public class BuildingManager : NetworkBehaviour
     {
         if (visualizeBuildableObject == null) return;
         int placementLayerMask = currentBuildableObjectSO.ActiveLayerMask.value;
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(ray, out RaycastHit hit, maxPlaceObjectDistance, placementLayerMask))
+        if (RaycastHelper.TryCenterScreenRaycast(maxPlaceObjectDistance, placementLayerMask, out var hit))
         {
             latestParentable = hit.collider.TryGetComponent(out Parentable parentable) ? parentable : null;
 

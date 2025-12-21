@@ -1,6 +1,4 @@
 using System;
-using Mono.CSharp;
-using NUnit.Framework.Internal;
 using Unity.Netcode;
 using UnityEngine;
 using Zenject;
@@ -47,15 +45,12 @@ public class PickUp : NetworkBehaviour
     }
     private bool TryPickUp()
     {
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        if (Physics.Raycast(ray, out var hit, maxPickupDistance, ~ghostLayerMask))
+        if (RaycastHelper.TryGetComponentFromCenterRaycastIgnore<PickableObject>(
+            maxPickupDistance, ghostLayerMask, out var pickable, out _))
         {
-            if (hit.collider.TryGetComponent(out PickableObject pickable))
-            {
-                var objRef = new NetworkObjectReference(pickable.NetworkObject);
-                RequestPickUpServerRpc(objRef);
-                return true;
-            }
+            var objRef = new NetworkObjectReference(pickable.NetworkObject);
+            RequestPickUpServerRpc(objRef);
+            return true;
         }
         return false;
     }

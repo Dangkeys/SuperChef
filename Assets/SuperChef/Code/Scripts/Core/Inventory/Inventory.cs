@@ -32,11 +32,12 @@ public class Inventory : NetworkBehaviour
 
 
     [Inject]
-    private void Init(GameInputReader inputReader, InventoryItemProviderSO inventoryItemProvider, PickUp pickUp, NetcodeHelper netcodeHelper)
+    private void Init(GameInputReader inputReader, InventoryHelper inventoryHelper, PickUp pickUp, NetcodeHelper netcodeHelper)
     {
         this.inputReader = inputReader;
         this.pickUp = pickUp;
         this.netcodeHelper = netcodeHelper;
+        this.inventoryHelper = inventoryHelper;
     }
 
 
@@ -81,14 +82,9 @@ public class Inventory : NetworkBehaviour
     public void PerformInteraction()
     {
         if (pickUp.CurrentPickableObject != null) return;
-        if (!Camera.main) return;
-
-        var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-
-        if (!Physics.Raycast(ray, out var hit, maxPickupDistance)) return;
-        if (!hit.collider.TryGetComponent(out InventoryItem inventoryItem)) return;
+        if (!RaycastHelper.TryGetComponentFromCenterRaycast<InventoryItem>(
+            maxPickupDistance, out var inventoryItem, out _)) return;
         if (!inventoryItem.TryGetComponent(out NetworkObject networkObject)) return;
-
         var networkRef = new NetworkObjectReference(networkObject);
         TryAddItemToInventory(inventoryItem, networkRef);
     }

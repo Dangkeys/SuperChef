@@ -19,12 +19,10 @@ public class CookingManager : NetworkBehaviour
         if (pickUp.CurrentPickableObject != null) return;
         if (!Camera.main) return;
 
-        var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-
-        if (!Physics.Raycast(ray, out var hit, maxInteractDistance)) return;
-        if (!hit.collider.TryGetComponent(out ChoppingHandler choppingHandler)) return;
+        if (!RaycastHelper.TryGetComponentFromCenterRaycast<ChoppingHandler>(
+            maxInteractDistance, out var choppingHandler, out _)) return;
         if (holdableProvider.CurrentHoldableItemSO == null) return;
-        if (holdableProvider.CurrentHoldableItemSO.Name != "Knife") return;
+        if (holdableProvider.CurrentHoldableItemSO.Name != "Knife") return;//for test purposes
         choppingHandler.RequestToCutServerRpc();
     }
 
