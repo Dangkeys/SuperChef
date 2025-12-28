@@ -1,8 +1,8 @@
-using UnityEditor;
-using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEngine;
 
 public class CreateFolders : EditorWindow
 {
@@ -15,7 +15,6 @@ public class CreateFolders : EditorWindow
         window.position = new Rect(Screen.width / 2, Screen.height / 2, 400, 150);
         window.ShowPopup();
     }
-    
 
     private static void CreateAllFolders()
     {
@@ -27,44 +26,36 @@ public class CreateFolders : EditorWindow
             $"{root}/Art/Materials",
             $"{root}/Art/Models",
             $"{root}/Art/Textures",
-
             $"{root}/Audio",
             $"{root}/Audio/Music",
             $"{root}/Audio/Sound",
-
             $"{root}/Code",
             $"{root}/Code/Scripts",
             $"{root}/Code/Scripts/Core",
             $"{root}/Code/Scripts/Systems",
             $"{root}/Code/Scripts/Entities",
-
             $"{root}/Code/Scripts/UI",
             $"{root}/Code/Scripts/Utilities",
             $"{root}/Code/Scripts/Events",
             $"{root}/Code/Scripts/Editor",
             $"{root}/Code/Scripts/ScriptableObjects",
             $"{root}/Code/Scripts/ScriptableObjects/Entities",
-
-
             $"{root}/Code/Shaders",
-
             $"{root}/Data",
             $"{root}/Data/Entities",
             $"{root}/Data/Entities/Player",
             $"{root}/Data/Entities/Enemies",
             $"{root}/Data/Entities/NPC",
-
             $"{root}/Docs",
             $"{root}/Docs/Design",
             $"{root}/Docs/ConceptArt",
             $"{root}/Docs/Marketing",
             $"{root}/Docs/Technical",
             $"{root}/Docs/Wiki",
-
             $"{root}/Level",
             $"{root}/Level/Prefabs",
             $"{root}/Level/Scenes",
-            $"{root}/Level/UI"
+            $"{root}/Level/UI",
         };
 
         foreach (string folder in folders)
