@@ -10,8 +10,8 @@ public abstract class BaseSO : ScriptableObject
     {
         if (string.IsNullOrEmpty(ID))
         {
+            Debug.Log($"[BaseSO] Generating new ID for {name} (was empty or null)");
             ID = Guid.NewGuid().ToString();
-            
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
 #endif

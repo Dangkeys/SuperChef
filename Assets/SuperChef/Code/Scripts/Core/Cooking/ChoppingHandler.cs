@@ -61,7 +61,6 @@ public class ChoppingHandler : NetworkBehaviour
         FoodItemSO foodItemSO = foodItem.InventoryItemSO as FoodItemSO;
         if (foodItemSO == null) return;
         InputIngredient = new RecipeIngredient(foodItemSO);
-
         CurrentRecipeSO = cookingRecipeProviderSO.GetRecipeSOFromInputAndCookingType(new List<RecipeIngredient> { InputIngredient }, cookingType);
 
         if (CurrentRecipeSO == null) return;
